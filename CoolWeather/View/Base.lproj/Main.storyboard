@@ -133,7 +133,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.84999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XyJ-RM-sJn">
+                                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.84999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XyJ-RM-sJn" userLabel="HourlyForecastScrollView">
                                                 <rect key="frame" x="28" y="490" width="359" height="256"/>
                                                 <subviews>
                                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jyz-x5-yNf">
@@ -267,18 +267,21 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </scrollView>
-                                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OE2-F6-N6o">
+                                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OE2-F6-N6o" userLabel="DailyForecastView">
                                                 <rect key="frame" x="28" y="781" width="359" height="277"/>
                                                 <subviews>
                                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="kaZ-Ha-YwM" customClass="FiveDayWeatherCollectionView" customModule="CoolWeather" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="359" height="277"/>
-                                                        <color key="backgroundColor" red="0.02837009914" green="0.023529414089999999" blue="0.051899515090000001" alpha="0.85012170649999996" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="FhJ-m9-yVr">
                                                             <size key="itemSize" width="359" height="128"/>
                                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         </collectionViewFlowLayout>
+                                                        <imageView key="backgroundView" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IconBackgroud" id="JlD-CO-hp1">
+                                                            <rect key="frame" x="0.0" y="0.0" width="359" height="277"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
                                                         <cells>
                                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FiveDaysCollectionView" id="MVW-N4-915" customClass="FiveDaysCollectionViewCell" customModule="CoolWeather" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="359" height="55"/>
@@ -330,10 +333,8 @@
                                                                                     </subviews>
                                                                                 </stackView>
                                                                             </subviews>
-                                                                            <color key="backgroundColor" red="0.02837009914" green="0.023529414089999999" blue="0.051899515090000001" alpha="0.85012170649999996" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         </stackView>
                                                                     </subviews>
-                                                                    <color key="backgroundColor" red="0.02837009914" green="0.023529414089999999" blue="0.051899515090000001" alpha="0.85012170649999996" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <constraints>
                                                                         <constraint firstItem="4or-d0-L7k" firstAttribute="leading" secondItem="tmu-Iq-47D" secondAttribute="leading" constant="10" id="0AI-Lb-e5M"/>
                                                                         <constraint firstItem="4or-d0-L7k" firstAttribute="leading" secondItem="tmu-Iq-47D" secondAttribute="leading" constant="10" id="34K-Z9-WqG"/>
@@ -373,9 +374,12 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AjE-xP-c25">
+                                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AjE-xP-c25" userLabel="AdditionalInformationView">
                                                 <rect key="frame" x="28" y="1082" width="359" height="168"/>
                                                 <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IconBackgroud" translatesAutoresizingMaskIntoConstraints="NO" id="58o-Bd-oEQ">
+                                                        <rect key="frame" x="0.0" y="0.0" width="359" height="168"/>
+                                                    </imageView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="WZD-cm-q8B">
                                                         <rect key="frame" x="14" y="18" width="331.5" height="95.5"/>
                                                         <subviews>
@@ -482,7 +486,11 @@
                                                 <constraints>
                                                     <constraint firstItem="WZD-cm-q8B" firstAttribute="centerY" secondItem="AjE-xP-c25" secondAttribute="centerY" constant="-18.5" id="G1K-oE-yv4"/>
                                                     <constraint firstAttribute="height" constant="168" id="MT8-pI-469"/>
+                                                    <constraint firstAttribute="bottom" secondItem="58o-Bd-oEQ" secondAttribute="bottom" id="NGK-jY-Q5G"/>
+                                                    <constraint firstItem="58o-Bd-oEQ" firstAttribute="leading" secondItem="AjE-xP-c25" secondAttribute="leading" id="OXc-1S-j8i"/>
                                                     <constraint firstItem="WZD-cm-q8B" firstAttribute="centerX" secondItem="AjE-xP-c25" secondAttribute="centerX" id="Obm-di-Hu4"/>
+                                                    <constraint firstAttribute="trailing" secondItem="58o-Bd-oEQ" secondAttribute="trailing" id="b88-Od-BfB"/>
+                                                    <constraint firstItem="58o-Bd-oEQ" firstAttribute="top" secondItem="AjE-xP-c25" secondAttribute="top" id="gcZ-6q-rES"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
@@ -521,13 +529,15 @@
                                 <rect key="frame" x="20" y="85" width="374" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T2u-7i-pPM">
-                                        <rect key="frame" x="0.0" y="0.5" width="40" height="39"/>
+                                        <rect key="frame" x="0.0" y="1" width="40" height="39"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="ARg-Cz-9Cg"/>
                                             <constraint firstAttribute="height" constant="40" id="CqM-gx-PQg"/>
                                         </constraints>
-                                        <color key="tintColor" systemColor="labelColor"/>
-                                        <state key="normal" backgroundImage="location.circle.fill" catalog="system"/>
+                                        <color key="tintColor" red="0.02837009914" green="0.023529414089999999" blue="0.051899515090000001" alpha="0.85012170649999996" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" backgroundImage="location.fill" catalog="system">
+                                            <color key="titleColor" red="0.02837009914" green="0.023529414089999999" blue="0.051899515090000001" alpha="0.85012170649999996" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
                                         <connections>
                                             <action selector="currentLocationPressed:" destination="Rr9-N8-VWc" eventType="touchUpInside" id="Bb2-Xq-XVq"/>
                                         </connections>
@@ -596,7 +606,7 @@
         <image name="IconBackgroud" width="362" height="233"/>
         <image name="Rain" width="170" height="190"/>
         <image name="hurricane" catalog="system" width="91" height="128"/>
-        <image name="location.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="location.fill" catalog="system" width="128" height="121"/>
         <image name="magnifyingglass" catalog="system" width="128" height="115"/>
         <image name="seal" catalog="system" width="128" height="128"/>
         <image name="sun.min.fill" catalog="system" width="128" height="121"/>
