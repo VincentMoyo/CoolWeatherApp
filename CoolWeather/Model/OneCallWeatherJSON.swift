@@ -25,5 +25,3 @@ struct OneCallWeatherJSON: Codable {
         }
     }
 }
-//-26.1186
-//28.3742

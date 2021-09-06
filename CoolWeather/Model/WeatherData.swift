@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherModelData {
+struct WeatherData {
     
     private var initialConditionName: [String] = []
     private var initialCityName = ""

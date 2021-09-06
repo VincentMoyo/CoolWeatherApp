@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherJSON: Codable{
+struct WeatherJSON: Codable {
     let city: City
     let list: [List]
     
@@ -36,7 +36,7 @@ struct WeatherJSON: Codable{
         }
         
         struct Weather: Codable {
-            let description : String
+            let description: String
             let id: Int
         }
         

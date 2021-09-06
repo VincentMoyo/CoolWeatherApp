@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  CoolWeather
+
+  Created by Vincent Moyo on 2021/09/06.
+  
+*/
+
+"ERROR" = "Error";
+"WEATHER_API_ERROR" = "Something went wrong in trying to retrieve the weather: ";

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OneCallWeatherViewModel {
+struct OneCallWeatherDataModel {
     let date: [Int]
     let sunrise: [Int]
     let sunset: [Int]
