@@ -48,6 +48,29 @@ class WeatherViewController: UIViewController {
         searchTextField.text = ""
     }
     
+    @IBAction func seeMorePressed(_ sender: UIButton) {
+        self.performSegue(withIdentifier: Constants.kMiscellaneousIdentifier, sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Constants.kMiscellaneousIdentifier {
+            let destinationVC = segue.destination as? MiscellaneousInformationViewController
+            
+            destinationVC?.gust = String(weatherViewModel.weatherData.gust)
+            destinationVC?.humidity = String(weatherViewModel.weatherData.humidity)
+            destinationVC?.windDegree = String(weatherViewModel.weatherData.windSpeedDegree)
+            destinationVC?.visibility = String(weatherViewModel.weatherData.visibility)
+            destinationVC?.pressure = String(weatherViewModel.weatherData.pressure)
+            destinationVC?.seaLevel = String(weatherViewModel.weatherData.seaLevel)
+            destinationVC?.windspeed = String(weatherViewModel.weatherData.windSpeed)
+            destinationVC?.uvProtection = String(weatherViewModel.weatherData.uvProtection)
+            destinationVC?.sunrise = weatherViewModel.convertTime(weatherViewModel.weatherData.sunrise)
+            destinationVC?.sunset = weatherViewModel.convertTime(weatherViewModel.weatherData.sunset)
+            destinationVC?.moonset = weatherViewModel.convertTime(weatherViewModel.weatherData.moonset)
+            destinationVC?.moonrise = weatherViewModel.convertTime(weatherViewModel.weatherData.moonrise)
+        }
+    }
+    
     private func bindHomeViewModel() {
         weatherViewModel.didHomeViewModelLoad = { result in
             if result {
@@ -93,7 +116,6 @@ extension WeatherViewController: CLLocationManagerDelegate {
 }
 
 extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.fiveDayForecastCollectionView {
             return weatherViewModel.weatherData.temperature.count
@@ -133,7 +155,6 @@ extension WeatherViewController {
         alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""),
                                                 style: .default,
                                                 handler: nil))
-        
         present(alertController, animated: true)
     }
 }

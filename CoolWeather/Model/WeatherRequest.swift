@@ -11,7 +11,7 @@ struct WeatherRequest {
     
     var delegateError: ErrorReporting?
     
-    func performFiveDayWeatherRequest(with urlString: String, completion: @escaping (Result<WeatherDataModel, Error>) -> Void) {
+    func performFiveDayWeatherRequest(with urlString: String, completion: @escaping (Result<HourlyWeatherDataModel, Error>) -> Void) {
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, _, error) in
@@ -46,34 +46,21 @@ struct WeatherRequest {
             task.resume()
         }
     }
+    
     private func parseOneCallWeatherJSON(_ weatherData: Data) -> OneCallWeatherDataModel? {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(OneCallWeatherJSON.self, from: weatherData)
             
+            let sunrise = decodedData.daily[0].sunrise
+            let sunset = decodedData.daily[0].sunset
+            let moonrise = decodedData.daily[0].moonrise
+            let moonset = decodedData.daily[0].moonset
+            let uvProtection = decodedData.daily[0].uvi
+            
             var date: [Int] = []
             for count in 0..<decodedData.daily.count {
                 date.append(decodedData.daily[count].dt)
-            }
-            
-            var sunrise: [Int] = []
-            for count in 0..<decodedData.daily.count {
-                sunrise.append(decodedData.daily[count].sunrise)
-            }
-            
-            var sunset: [Int] = []
-            for count in 0..<decodedData.daily.count {
-                sunset.append(decodedData.daily[count].sunset)
-            }
-            
-            var moonrise: [Int] = []
-            for count in 0..<decodedData.daily.count {
-                moonrise.append(decodedData.daily[count].moonrise)
-            }
-            
-            var moonset: [Int] = []
-            for count in 0..<decodedData.daily.count {
-                moonset.append(decodedData.daily[count].moonset)
             }
             
             var maximumTemperature: [Double] = []
@@ -92,16 +79,17 @@ struct WeatherRequest {
                                                   moonrise: moonrise,
                                                   moonset: moonset,
                                                   maximumTemperatureOfTheDay: maximumTemperature,
-                                                  minimumTemperatureOfTheDay: minimumTemperature)
-            
+                                                  minimumTemperatureOfTheDay: minimumTemperature,
+                                                  uvProtection: uvProtection)
             return weather
         } catch {
+            print(error)
             delegateError?.showUserErrorMessageDidInitiate(NSLocalizedString("WEATHER_API_ERROR", comment: "") + "\(error)")
             return nil
         }
     }
     
-    private func parseFiveDayWeatherJSON(_ weatherData: Data) -> WeatherDataModel? {
+    private func parseFiveDayWeatherJSON(_ weatherData: Data) -> HourlyWeatherDataModel? {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(WeatherJSON.self, from: weatherData)
@@ -112,13 +100,13 @@ struct WeatherRequest {
             let gust = decodedData.list[0].wind.gust
             let latitude = decodedData.city.coord.lat
             let longitude = decodedData.city.coord.lon
-            
             let name = decodedData.city.name
             let minTemp = decodedData.list[0].main.temp_min
             let maxTemp = decodedData.list[0].main.temp_max
+            let visibility = decodedData.list[0].visibility
+            let windDegree = decodedData.list[0].wind.deg
             
             var conditionName: [String] = []
-            
             var id: [Int] = []
             for count in 0..<decodedData.list.count {
                 id.append(decodedData.list[count].weather[0].id)
@@ -140,23 +128,25 @@ struct WeatherRequest {
                 tempMaxMin[decodedData.list[count].main.temp_min] = decodedData.list[count].main.temp_max
             }
             
-            let weather = WeatherDataModel(conditionId: id,
-                                           cityName: name,
-                                           temperature: temperature,
-                                           date: date,
-                                           minTemperature: minTemp,
-                                           maxTemperature: maxTemp,
-                                           humidity: newHumidity,
-                                           wind: windSpeed,
-                                           pressure: pressure,
-                                           gust: gust,
-                                           seaLevel: seaLevel,
-                                           conditionName: conditionName,
-                                           latitude: latitude,
-                                           longitude: longitude)
-            
+            let weather = HourlyWeatherDataModel(conditionId: id,
+                                                 cityName: name,
+                                                 temperature: temperature,
+                                                 date: date,
+                                                 minTemperature: minTemp,
+                                                 maxTemperature: maxTemp,
+                                                 humidity: newHumidity,
+                                                 wind: windSpeed,
+                                                 pressure: pressure,
+                                                 gust: gust,
+                                                 seaLevel: seaLevel,
+                                                 conditionName: conditionName,
+                                                 latitude: latitude,
+                                                 longitude: longitude,
+                                                 visibility: visibility,
+                                                 windSpeedDegree: windDegree)
             return weather
         } catch {
+            print(error)
             delegateError?.showUserErrorMessageDidInitiate(NSLocalizedString("WEATHER_API_ERROR", comment: "") + "\(error)")
             return nil
         }

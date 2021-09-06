@@ -25,10 +25,13 @@ struct WeatherData {
     private var initialOneCallWeatherDate: [Int] = []
     private var initialMaximumTemperatureOfTheDay: [Double] = []
     private var initialMinimumTemperatureOfTheDay: [Double] = []
-    private var initialSunset: [Int] = []
-    private var initialSunrise: [Int] = []
-    private var initialMoonset: [Int] = []
-    private var initialMoonrise: [Int] = []
+    private var initialSunset = 0
+    private var initialSunrise = 0
+    private var initialMoonset = 0
+    private var initialMoonrise = 0
+    private var initialUvProtection = 0.0
+    private var initialVisibility = 0
+    private var initialWindSpeedDegree = 0
     
     var maximumTemperatureOfDay: [Double] {
         get { return initialMaximumTemperatureOfTheDay }
@@ -38,21 +41,36 @@ struct WeatherData {
         get { return initialMinimumTemperatureOfTheDay }
         set { initialMinimumTemperatureOfTheDay = newValue }
     }
-    var sunset: [Int] {
+    var sunset: Int {
         get { return initialSunset }
         set { initialSunset = newValue }
     }
-    var sunrise: [Int] {
+    var sunrise: Int {
         get { return initialSunrise }
         set { initialSunrise = newValue }
     }
-    var moonset: [Int] {
+    var moonset: Int {
         get { return initialMoonset }
         set { initialMoonset = newValue }
     }
-    var moonrise: [Int] {
+    var moonrise: Int {
         get { return initialMoonrise }
         set { initialMoonrise = newValue }
+    }
+    
+    var visibility: Int {
+        get { return initialVisibility }
+        set { initialVisibility = newValue }
+    }
+    
+    var windSpeedDegree: Int {
+        get { return initialWindSpeedDegree }
+        set { initialWindSpeedDegree = newValue }
+    }
+    
+    var uvProtection: Double {
+        get { return initialUvProtection }
+        set { initialUvProtection = newValue }
     }
     
     var conditionName: [String] {

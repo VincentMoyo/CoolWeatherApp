@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherDataModel {
+struct HourlyWeatherDataModel {
     let conditionId: [Int]
     let cityName: String
     let temperature: [Double]
@@ -22,4 +22,6 @@ struct WeatherDataModel {
     var conditionName: [String]
     let latitude: Double
     let longitude: Double
+    let visibility: Int
+    let windSpeedDegree: Int
 }

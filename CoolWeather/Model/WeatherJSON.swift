@@ -25,6 +25,7 @@ struct WeatherJSON: Codable {
         let main: Main
         let weather: [Weather]
         let wind: Wind
+        let visibility: Int
         
         struct Main: Codable {
             let temp: Double
@@ -43,6 +44,7 @@ struct WeatherJSON: Codable {
         struct Wind: Codable {
             let speed: Double
             let gust: Double
+            let deg: Int
         }
     }
 }

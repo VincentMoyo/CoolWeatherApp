@@ -43,6 +43,8 @@ class WeatherViewModel {
                 self.weatherData.windSpeed = newWeather.wind
                 self.weatherData.latitude = newWeather.latitude
                 self.weatherData.longitude = newWeather.longitude
+                self.weatherData.visibility = newWeather.visibility
+                self.weatherData.windSpeedDegree = newWeather.windSpeedDegree
                 self.requestOneWWeatherCallData(String(newWeather.latitude), String(newWeather.longitude))
             } catch {
                 self.homeViewModelError?(error)
@@ -62,6 +64,7 @@ class WeatherViewModel {
                 self.weatherData.moonrise = newOneCallWeather.moonrise
                 self.weatherData.sunset = newOneCallWeather.sunset
                 self.weatherData.sunrise = newOneCallWeather.sunrise
+                self.weatherData.uvProtection = newOneCallWeather.uvProtection
                 self.didHomeViewModelLoad?(true)
             } catch {
                 self.homeViewModelError?(error)
@@ -98,7 +101,7 @@ class WeatherViewModel {
     
     func convertDate(_ date: Int) -> String {
         let date = Date(timeIntervalSince1970: Double(date))
-        let dateFormate = "YY-MM-dd"
+        let dateFormate = Constants.kDateFormat
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormate
         dateFormatter.timeZone = .current

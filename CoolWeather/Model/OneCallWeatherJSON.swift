@@ -18,6 +18,7 @@ struct OneCallWeatherJSON: Codable {
         let moonrise: Int
         let moonset: Int
         let temp: Temp
+        let uvi: Double
         
         struct Temp: Codable {
             let min: Double
