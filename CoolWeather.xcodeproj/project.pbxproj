@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,6 +28,8 @@
 		785AE2AE26E0D7F800FF9039 /* OneCallWeatherAPIFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785AE2AD26E0D7F800FF9039 /* OneCallWeatherAPIFormat.swift */; };
 		785AE2B026E0E00700FF9039 /* OneCallWeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785AE2AF26E0E00700FF9039 /* OneCallWeatherDataModel.swift */; };
 		785AE2B626E1015900FF9039 /* FiveDaysCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785AE2B526E1015900FF9039 /* FiveDaysCollectionViewCell.swift */; };
+		788F7BB926F2497800A2464F /* DropDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 788F7BB826F2497800A2464F /* DropDownCell.xib */; };
+		788F7BBB26F24A2000A2464F /* DropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F7BBA26F24A2000A2464F /* DropDownCell.swift */; };
 		7898812626DCECC5006A3EE1 /* HourlyWeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7898812526DCECC5006A3EE1 /* HourlyWeatherDataModel.swift */; };
 		7898812826DCEFF9006A3EE1 /* HourlyWeatherAPIFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7898812726DCEFF9006A3EE1 /* HourlyWeatherAPIFormat.swift */; };
 		7898812A26DD1A3A006A3EE1 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7898812926DD1A3A006A3EE1 /* WeatherViewModel.swift */; };
@@ -78,6 +80,8 @@
 		785AE2AD26E0D7F800FF9039 /* OneCallWeatherAPIFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneCallWeatherAPIFormat.swift; sourceTree = "<group>"; };
 		785AE2AF26E0E00700FF9039 /* OneCallWeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneCallWeatherDataModel.swift; sourceTree = "<group>"; };
 		785AE2B526E1015900FF9039 /* FiveDaysCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveDaysCollectionViewCell.swift; sourceTree = "<group>"; };
+		788F7BB826F2497800A2464F /* DropDownCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropDownCell.xib; sourceTree = "<group>"; };
+		788F7BBA26F24A2000A2464F /* DropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownCell.swift; sourceTree = "<group>"; };
 		7898812526DCECC5006A3EE1 /* HourlyWeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherDataModel.swift; sourceTree = "<group>"; };
 		7898812726DCEFF9006A3EE1 /* HourlyWeatherAPIFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherAPIFormat.swift; sourceTree = "<group>"; };
 		7898812926DD1A3A006A3EE1 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
@@ -129,7 +133,6 @@
 				2FA2857240753A81EB4D03C0 /* Pods-CoolWeatherTests.debug.xcconfig */,
 				EADBCF03EDAC25D0327AE6C6 /* Pods-CoolWeatherTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -227,6 +230,7 @@
 		782A9DC426DCCC52008B336F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				788F7BBA26F24A2000A2464F /* DropDownCell.swift */,
 				782A9D9326DCCC0B008B336F /* WeatherViewController.swift */,
 				780CCA2026DFB08A00C2C535 /* ForecastCollectionViewCell.swift */,
 				785AE2B526E1015900FF9039 /* FiveDaysCollectionViewCell.swift */,
@@ -239,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				782A9D9526DCCC0B008B336F /* Main.storyboard */,
+				788F7BB826F2497800A2464F /* DropDownCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -355,6 +360,7 @@
 				782A9D9F26DCCC0C008B336F /* LaunchScreen.storyboard in Resources */,
 				782C4B6B26E6040C00B47FBF /* Localizable.strings in Resources */,
 				782A9D9C26DCCC0C008B336F /* Assets.xcassets in Resources */,
+				788F7BB926F2497800A2464F /* DropDownCell.xib in Resources */,
 				782A9D9726DCCC0B008B336F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -504,6 +510,7 @@
 				785AE2B026E0E00700FF9039 /* OneCallWeatherDataModel.swift in Sources */,
 				782A9DC926DCDF8B008B336F /* WeatherRequest.swift in Sources */,
 				782C4B7126E605B900B47FBF /* AlertProtocols.swift in Sources */,
+				788F7BBB26F24A2000A2464F /* DropDownCell.swift in Sources */,
 				782A9D9426DCCC0B008B336F /* WeatherViewController.swift in Sources */,
 				780CCA2126DFB08A00C2C535 /* ForecastCollectionViewCell.swift in Sources */,
 				785AE2AE26E0D7F800FF9039 /* OneCallWeatherAPIFormat.swift in Sources */,

@@ -20,6 +20,7 @@ class WeatherViewController: UIViewController, ErrorReporting {
     @IBOutlet private weak var searchTextField: UITextField!
     @IBOutlet private weak var temperatureBackgroundImage: UIImageView!
     @IBOutlet private weak var fiveDayCollectionView: UICollectionView!
+    @IBOutlet weak var locationView: UIView!
     
     @IBOutlet private weak var seaLevel: UILabel!
     @IBOutlet private weak var humidity: UILabel!
@@ -27,28 +28,48 @@ class WeatherViewController: UIViewController, ErrorReporting {
     @IBOutlet private weak var windSpeed: UILabel!
     
     lazy private var weatherViewModel = WeatherViewModel()
+    let defaults = UserDefaults.standard
     
     let menu: DropDown = {
         let menu = DropDown()
-        menu.dataSource = ["Item1",
-                           "Item2",
-                           "Item3",
-                           "Item4"]
+        menu.cellNib = UINib(nibName: "DropDownCell", bundle: nil)
+        menu.customCellConfiguration = {_, _, cell in
+            guard let cell = cell as? UserLocationsDropDownCell else {
+                return
+            }
+        }
         return menu
     }()
     
-    
-    
-    
+    var userLocations = [""]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         weatherViewModel.locationManager.delegate = self
         searchTextField.delegate = self
         currentWeatherIcon.layer.cornerRadius = currentWeatherIcon.frame.size.width / 2
         weatherViewModel.requestLocation()
         bindHomeViewModelErrors()
         bindHomeViewModel()
+        menu.anchorView = locationView
+    
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLocationView))
+        gesture.numberOfTapsRequired = 1
+        gesture.numberOfTouchesRequired = 1
+        locationView.addGestureRecognizer(gesture)
+        menu.selectionAction = {index, title in
+            self.locationSelected(title, index)
+        }
+        
+        if let items = defaults.array(forKey: "UserLocations") as? [String] {
+            userLocations = items
+            menu.dataSource = items
+        }
+    }
+    
+    @objc func didTapLocationView() {
+        menu.show()
     }
     
     @IBAction func currentLocationPressed(_ sender: Any) {
@@ -127,6 +148,7 @@ extension WeatherViewController: UITextFieldDelegate {
         searchTextField.endEditing(true)
         if let city = searchTextField.text {
             weatherViewModel.searchCurrentWeather(for: city)
+            
         }
         searchTextField.text = ""
     }
@@ -139,6 +161,11 @@ extension WeatherViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let city = searchTextField.text {
             weatherViewModel.searchCurrentWeather(for: city)
+            if userLocations.contains(city) == false {
+                userLocations.append(city)
+            }
+            defaults.setValue(userLocations, forKey: "UserLocations")
+            menu.dataSource = userLocations
         }
         searchTextField.text = ""
     }
@@ -204,6 +231,26 @@ extension WeatherViewController {
         alertController.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""),
                                                 style: .default,
                                                 handler: nil))
+        present(alertController, animated: true)
+    }
+    
+    func locationSelected(_ title: String, _ index: Int) {
+        let alertController = UIAlertController(title: title,
+                                                message: "Do you want search or delete \(title)?",
+                                                preferredStyle: .alert)
+        
+        let searchAction = UIAlertAction(title: "Search", style: UIAlertAction.Style.default) { _ in
+            self.weatherViewModel.searchCurrentWeather(for: title)
+        }
+        
+        let deleteAction = UIAlertAction(title: "Delete", style: UIAlertAction.Style.default) { _ in
+            self.userLocations.remove(at: index)
+            self.defaults.setValue(self.userLocations, forKey: "UserLocations")
+            self.menu.dataSource = self.userLocations
+        }
+        
+        alertController.addAction(searchAction)
+        alertController.addAction(deleteAction)
         present(alertController, animated: true)
     }
 }
