@@ -8,7 +8,7 @@
 import Foundation
 
 struct Constants {
-    static let kDateFormat = "YY-MM-dd"
+    static let kDateFormat = "EEEE"
     static let kMiscellaneousIdentifier = "goToMiscellaneous"
     struct WeatherAPI {
         static let kWeatherURL = "https://api.openweathermap.org/data/2.5/forecast?units=metric&appid=142b7217f291c1757ed44fd29411e4b3&"

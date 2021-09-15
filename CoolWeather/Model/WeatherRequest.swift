@@ -50,27 +50,27 @@ struct WeatherRequest {
     private func parseOneCallWeatherJSON(_ weatherData: Data) -> OneCallWeatherDataModel? {
         let decoder = JSONDecoder()
         do {
-            let decodedData = try decoder.decode(OneCallWeatherJSON.self, from: weatherData)
+            let decodedData = try decoder.decode(OneCallWeatherAPIFormat.self, from: weatherData)
             
-            let sunrise = decodedData.daily[0].sunrise
-            let sunset = decodedData.daily[0].sunset
-            let moonrise = decodedData.daily[0].moonrise
-            let moonset = decodedData.daily[0].moonset
-            let uvProtection = decodedData.daily[0].uvi
+            let sunrise = decodedData.daily[0].sunriseTime
+            let sunset = decodedData.daily[0].sunsetTime
+            let moonrise = decodedData.daily[0].moonriseTime
+            let moonset = decodedData.daily[0].moonsetTime
+            let uvProtection = decodedData.daily[0].uvProtection
             
             var date: [Int] = []
             for count in 0..<decodedData.daily.count {
-                date.append(decodedData.daily[count].dt)
+                date.append(decodedData.daily[count].date)
             }
             
-            var maximumTemperature: [Double] = []
+            var maximumTemperature: [Int] = []
             for count in 0..<decodedData.daily.count {
-                maximumTemperature.append(decodedData.daily[count].temp.max)
+                maximumTemperature.append(Int(decodedData.daily[count].currentTemperature.maximum))
             }
             
-            var minimumTemperature: [Double] = []
+            var minimumTemperature: [Int] = []
             for count in 0..<decodedData.daily.count {
-                minimumTemperature.append(decodedData.daily[count].temp.min)
+                minimumTemperature.append(Int(decodedData.daily[count].currentTemperature.minimum))
             }
             
             let weather = OneCallWeatherDataModel(date: date,
@@ -83,7 +83,6 @@ struct WeatherRequest {
                                                   uvProtection: uvProtection)
             return weather
         } catch {
-            print(error)
             delegateError?.showUserErrorMessageDidInitiate(NSLocalizedString("WEATHER_API_ERROR", comment: "") + "\(error)")
             return nil
         }
@@ -92,35 +91,35 @@ struct WeatherRequest {
     private func parseFiveDayWeatherJSON(_ weatherData: Data) -> HourlyWeatherDataModel? {
         let decoder = JSONDecoder()
         do {
-            let decodedData = try decoder.decode(WeatherJSON.self, from: weatherData)
+            let decodedData = try decoder.decode(HourlyWeatherAPIFormat.self, from: weatherData)
             let newHumidity = decodedData.list[0].main.humidity
             let seaLevel = decodedData.list[0].main.sea_level
             let pressure = decodedData.list[0].main.pressure
             let windSpeed = decodedData.list[0].wind.speed
             let gust = decodedData.list[0].wind.gust
-            let latitude = decodedData.city.coord.lat
-            let longitude = decodedData.city.coord.lon
-            let name = decodedData.city.name
+            let latitude = decodedData.city.coordinates.latitude
+            let longitude = decodedData.city.coordinates.longitude
+            let name = decodedData.city.cityName
             let minTemp = decodedData.list[0].main.temp_min
             let maxTemp = decodedData.list[0].main.temp_max
             let visibility = decodedData.list[0].visibility
-            let windDegree = decodedData.list[0].wind.deg
+            let windDegree = decodedData.list[0].wind.degrees
             
             var conditionName: [String] = []
             var id: [Int] = []
             for count in 0..<decodedData.list.count {
-                id.append(decodedData.list[count].weather[0].id)
-                conditionName.append(checkConditionId(decodedData.list[count].weather[0].id))
+                id.append(decodedData.list[count].weather[0].descriptionID)
+                conditionName.append(checkConditionId(decodedData.list[count].weather[0].descriptionID))
             }
             
-            var temperature: [Double] = []
+            var temperature: [Int] = []
             for count in 0..<decodedData.list.count {
-                temperature.append(decodedData.list[count].main.temp)
+                temperature.append(Int(decodedData.list[count].main.temp))
             }
             
             var date: [Int] = []
             for count in 0..<decodedData.list.count {
-                date.append(decodedData.list[count].dt)
+                date.append(decodedData.list[count].date)
             }
             
             var tempMaxMin: [Double: Double] = [:]
@@ -132,8 +131,8 @@ struct WeatherRequest {
                                                  cityName: name,
                                                  temperature: temperature,
                                                  date: date,
-                                                 minTemperature: minTemp,
-                                                 maxTemperature: maxTemp,
+                                                 minTemperature: Int(minTemp),
+                                                 maxTemperature: Int(maxTemp),
                                                  humidity: newHumidity,
                                                  wind: windSpeed,
                                                  pressure: pressure,
@@ -146,7 +145,6 @@ struct WeatherRequest {
                                                  windSpeedDegree: windDegree)
             return weather
         } catch {
-            print(error)
             delegateError?.showUserErrorMessageDidInitiate(NSLocalizedString("WEATHER_API_ERROR", comment: "") + "\(error)")
             return nil
         }

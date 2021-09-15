@@ -8,138 +8,27 @@
 import Foundation
 
 struct WeatherData {
-    
-    private var initialConditionName: [String] = []
-    private var initialCityName = ""
-    private var initialTemperature: [Double] = []
-    private var initialDate: [Int] = []
-    private var initialMaximumTemperature = 0.0
-    private var initialMinimumTemperature = 0.0
-    private var initialSeaLevel = 0
-    private var initialHumidity = 0
-    private var initialWindSpeed = 0.0
-    private var initialPressure = 0
-    private var initialGust = 0.0
-    private var initialLatitude = 0.0
-    private var initialLongitude = 0.0
-    private var initialOneCallWeatherDate: [Int] = []
-    private var initialMaximumTemperatureOfTheDay: [Double] = []
-    private var initialMinimumTemperatureOfTheDay: [Double] = []
-    private var initialSunset = 0
-    private var initialSunrise = 0
-    private var initialMoonset = 0
-    private var initialMoonrise = 0
-    private var initialUvProtection = 0.0
-    private var initialVisibility = 0
-    private var initialWindSpeedDegree = 0
-    
-    var maximumTemperatureOfDay: [Double] {
-        get { return initialMaximumTemperatureOfTheDay }
-        set { initialMaximumTemperatureOfTheDay = newValue }
-    }
-    var minimumTemperatureOfDay: [Double] {
-        get { return initialMinimumTemperatureOfTheDay }
-        set { initialMinimumTemperatureOfTheDay = newValue }
-    }
-    var sunset: Int {
-        get { return initialSunset }
-        set { initialSunset = newValue }
-    }
-    var sunrise: Int {
-        get { return initialSunrise }
-        set { initialSunrise = newValue }
-    }
-    var moonset: Int {
-        get { return initialMoonset }
-        set { initialMoonset = newValue }
-    }
-    var moonrise: Int {
-        get { return initialMoonrise }
-        set { initialMoonrise = newValue }
-    }
-    
-    var visibility: Int {
-        get { return initialVisibility }
-        set { initialVisibility = newValue }
-    }
-    
-    var windSpeedDegree: Int {
-        get { return initialWindSpeedDegree }
-        set { initialWindSpeedDegree = newValue }
-    }
-    
-    var uvProtection: Double {
-        get { return initialUvProtection }
-        set { initialUvProtection = newValue }
-    }
-    
-    var conditionName: [String] {
-        get { return initialConditionName }
-        set { initialConditionName = newValue}
-    }
-    
-    var cityName: String {
-        get { return initialCityName }
-        set { initialCityName = newValue }
-    }
-    
-    var temperature: [Double] {
-        get { return initialTemperature }
-        set { initialTemperature = newValue }
-    }
-    
-    var latitude: Double {
-        get { return initialLatitude }
-        set { initialLatitude = newValue }
-    }
-    
-    var longitude: Double {
-        get { return initialLongitude }
-        set { initialLongitude = newValue }
-    }
-    
-    var maximumTemperature: Double {
-        get { return initialMaximumTemperature }
-        set { initialMaximumTemperature = newValue }
-    }
-    
-    var minimumTemperature: Double {
-        get { return initialMaximumTemperature }
-        set { initialMinimumTemperature = newValue }
-    }
-    
-    var date: [Int] {
-        get { return initialDate }
-        set { initialDate = newValue }
-    }
-    
-    var oneCallDate: [Int] {
-        get { return initialOneCallWeatherDate }
-        set { initialOneCallWeatherDate = newValue }
-    }
-    
-    var seaLevel: Int {
-        get { return initialSeaLevel }
-        set { initialSeaLevel = newValue }
-    }
-    
-    var humidity: Int {
-        get { return initialHumidity }
-        set { initialHumidity = newValue }
-    }
-    
-    var windSpeed: Double {
-        get { return initialWindSpeed }
-        set { initialWindSpeed = newValue }
-    }
-    
-    var pressure: Int {
-        get { return initialPressure }
-        set { initialPressure = newValue }
-    }
-    
-    var gust: Double {
-        get { return initialGust }
-        set { initialGust = newValue }
-    }
+    var initialConditionName: [String]
+    var initialCityName: String
+    var initialTemperature: [Double]
+    var initialDate: [Int]
+    var initialMaximumTemperature: Double
+    var initialMinimumTemperature: Double
+    var initialSeaLevel: Int
+    var initialHumidity: Int
+    var initialWindSpeed: Double
+    var initialPressure: Int
+    var initialGust: Double
+    var initialLatitude: Double
+    var initialLongitude: Double
+    var initialOneCallWeatherDate: [Int]
+    var initialMaximumTemperatureOfTheDay: [Double]
+    var initialMinimumTemperatureOfTheDay: [Double]
+    var initialSunset: Int
+    var initialSunrise: Int
+    var initialMoonset: Int
+    var initialMoonrise: Int
+    var initialUvProtection: Double
+    var initialVisibility: Int
+    var initialWindSpeedDegree: Int
 }

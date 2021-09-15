@@ -10,10 +10,10 @@ import Foundation
 struct HourlyWeatherDataModel {
     let conditionId: [Int]
     let cityName: String
-    let temperature: [Double]
+    let temperature: [Int]
     let date: [Int]
-    let minTemperature: Double
-    let maxTemperature: Double
+    let minTemperature: Int
+    let maxTemperature: Int
     let humidity: Int
     let wind: Double
     let pressure: Int

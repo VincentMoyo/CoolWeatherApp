@@ -13,7 +13,7 @@ struct OneCallWeatherDataModel {
     let sunset: Int
     let moonrise: Int
     let moonset: Int
-    let maximumTemperatureOfTheDay: [Double]
-    let minimumTemperatureOfTheDay: [Double]
+    let maximumTemperatureOfTheDay: [Int]
+    let minimumTemperatureOfTheDay: [Int]
     let uvProtection: Double
 }
