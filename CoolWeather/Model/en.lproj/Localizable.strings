@@ -8,3 +8,4 @@
 
 "ERROR" = "Error";
 "WEATHER_API_ERROR" = "Something went wrong in trying to retrieve the weather: ";
+"SEARCH_OR_DELETE_CONFIRMATION"  = "Do you want search or delete ";

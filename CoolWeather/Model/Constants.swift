@@ -8,8 +8,11 @@
 import Foundation
 
 struct Constants {
+    
     static let kDateFormat = "EEEE"
     static let kMiscellaneousIdentifier = "goToMiscellaneous"
+    static let kUserLocations = "UserLocations"
+    
     struct WeatherAPI {
         static let kWeatherURL = "https://api.openweathermap.org/data/2.5/forecast?units=metric&appid=142b7217f291c1757ed44fd29411e4b3&"
         static let kOneCallWeatherURL = "https://api.openweathermap.org/data/2.5/onecall?appid=142b7217f291c1757ed44fd29411e4b3&units=metric&exclude=hourly"
@@ -35,5 +38,19 @@ struct Constants {
         static let kCloudFog = "CloudFog"
         static let kClearSky = "ClearSky"
         static let kDefault = "IconBackground"
+    }
+    struct WeatherSymbols {
+        static let kCelsiusSymbol = " ° C"
+        static let kHumiditySymbol = "%"
+        static let kPressureSymbol = " hPa"
+        static let kVisibilitySymbol = " km"
+        static let kSpeedSymbol = " km/hr"
+        static let kDegreeSymbol = "°"
+        static let kSeaLevelSymbol = " m"
+    }
+    struct AlertButtonTexts {
+        static let kSearch = "Search"
+        static let kDelete = "Delete"
+        static let kPlaceholder = "Please a city"
     }
 }

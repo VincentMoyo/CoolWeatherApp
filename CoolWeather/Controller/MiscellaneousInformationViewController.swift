@@ -37,7 +37,7 @@ class MiscellaneousInformationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        windDegreeLabel.text = windDegree
         windSpeedLabel.text = windspeed
         gustLabel.text = gust
         windSpeedLabel.text = windspeed

@@ -9,11 +9,19 @@ import Foundation
 import CoreLocation
 import DropDown
 
+enum WeatherCondition: String {
+    case lightning = "Lightning"
+    case clearSky = "ClearSky"
+    case drizzle = "Drizzle"
+    case rain = "Rain"
+    case fog = "Fog"
+    case snow = "Snow"
+    case notAvailable = "Not Available"
+}
+
 class WeatherViewModel {
     
-    let locationManager = CLLocationManager()
     private static let dateFormatter = DateFormatter()
-    
     private let weatherRequest = WeatherRequest()
     private var weather: HourlyWeatherDataModel?
     private var oneCallAPI: OneCallWeatherDataModel?
@@ -28,10 +36,6 @@ class WeatherViewModel {
     private var todayWeatherCondition: WeatherCondition? {
         guard let condition = weather?.conditionName.first else { return nil }
         return WeatherCondition(rawValue: condition)
-    }
-    
-    func appendCelsiusSymbol() -> String {
-        " ° C"
     }
     
     func backGroundImagesName() -> String {
@@ -71,7 +75,7 @@ class WeatherViewModel {
     }
     
     private func requestOneWWeatherCallData(_ latitude: String, _ longitude: String) {
-        let URLString = "\(Constants.WeatherAPI.kOneCallWeatherURL  )&lat=\(latitude)&lon=\(longitude)"
+        let URLString = "\(Constants.WeatherAPI.kOneCallWeatherURL)&lat=\(latitude)&lon=\(longitude)"
         weatherRequest.performOneCallWeatherRequest(with: URLString) { result in
             do {
                 let newOneCallWeather = try result.get()
@@ -82,6 +86,56 @@ class WeatherViewModel {
             }
         }
     }
+    
+    // MARK: - Drop Down Menu
+    
+    let menu: DropDown = {
+        let menu = DropDown()
+        menu.cellNib = UINib(nibName: "DropDownCell", bundle: nil)
+        menu.customCellConfiguration = {_, _, cell in
+            guard let cell = cell as? UserLocationsDropDownCell else {
+                return
+            }
+        }
+        return menu
+    }()
+    
+    // MARK: - Location Manager
+    
+    let locationManager = CLLocationManager()
+    
+    func requestLocation() {
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            locationManager.stopUpdatingLocation()
+            let lat = location.coordinate.latitude
+            let lon = location.coordinate.longitude
+            searchCurrentWeather(lat, lon)
+        }
+    }
+    
+    // MARK: - User Defaults
+    
+    let defaults = UserDefaults.standard
+    var userLocations = [""]
+    
+    func loadUserLocationsFromUserDefaults() {
+        if let items = defaults.array(forKey: Constants.kUserLocations) as? [String] {
+            userLocations = items
+            menu.dataSource = items
+        }
+    }
+    
+    func updateUserDefaults() {
+        defaults.setValue(userLocations, forKey: Constants.kUserLocations)
+        menu.dataSource = userLocations
+    }
+    
+    // MARK: - Conversion of unix UTC to time
     
     func formattedShortStyleTime(for date: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: Double(date))
@@ -98,19 +152,7 @@ class WeatherViewModel {
         return WeatherViewModel.dateFormatter.string(from: date)
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            locationManager.stopUpdatingLocation()
-            let lat = location.coordinate.latitude
-            let lon = location.coordinate.longitude
-            searchCurrentWeather(lat, lon)
-        }
-    }
-    
-    func requestLocation() {
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
-    }
+    // MARK: - Weather Variables
     
     var cityName: String {
         weather?.cityName ?? ""
@@ -188,14 +230,4 @@ class WeatherViewModel {
     var uvProtection: Double {
         oneCallAPI?.uvProtection ?? 1.1
     }
-}
-
-enum WeatherCondition: String {
-    case lightning = "Lightning"
-    case clearSky = "ClearSky"
-    case drizzle = "Drizzle"
-    case rain = "Rain"
-    case fog = "Fog"
-    case snow = "Snow"
-    case notAvailable = "Not Available" 
 }

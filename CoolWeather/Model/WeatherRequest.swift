@@ -62,6 +62,7 @@ struct WeatherRequest {
             for count in 0..<decodedData.daily.count {
                 date.append(decodedData.daily[count].date)
             }
+            print("hksgisbhgiakshbfgijkashbgiawhbvf \(date)")
             
             var maximumTemperature: [Int] = []
             for count in 0..<decodedData.daily.count {

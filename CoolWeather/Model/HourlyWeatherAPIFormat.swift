@@ -55,7 +55,7 @@ struct HourlyWeatherAPIFormat: Codable {
                 case descriptionID = "id"
             }
         }
-
+        
         struct Wind: Codable {
             let speed: Double
             let gust: Double
