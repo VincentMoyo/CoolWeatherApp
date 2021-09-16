@@ -140,9 +140,7 @@ extension WeatherViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let city = searchTextField.text {
             weatherViewModel.searchCurrentWeather(for: city)
-            if weatherViewModel.userLocations.contains(city) == false {
-                weatherViewModel.userLocations.append(city)
-            }
+            weatherViewModel.addCityToUserDefault(city)
             weatherViewModel.updateUserDefaults()
         }
         searchTextField.text = ""

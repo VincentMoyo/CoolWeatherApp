@@ -135,6 +135,12 @@ class WeatherViewModel {
         menu.dataSource = userLocations
     }
     
+    func addCityToUserDefault(_ city: String) {
+        if userLocations.contains(city) == false {
+            userLocations.append(city)
+        }
+    }
+    
     // MARK: - Conversion of unix UTC to time
     
     func formattedShortStyleTime(for date: TimeInterval) -> String {
