@@ -19,11 +19,11 @@ class WeatherViewController: UIViewController, ErrorReporting {
     @IBOutlet private weak var searchTextField: UITextField!
     @IBOutlet private weak var temperatureBackgroundImage: UIImageView!
     @IBOutlet private weak var fiveDayCollectionView: UICollectionView!
-    @IBOutlet weak var locationView: UIView!
-    @IBOutlet weak var sunriseTime: UILabel!
-    @IBOutlet weak var sunsetTime: UILabel!
-    @IBOutlet weak var moonriseTime: UILabel!
-    @IBOutlet weak var moonsetTime: UILabel!
+    @IBOutlet private weak var locationView: UIView!
+    @IBOutlet private weak var sunriseTime: UILabel!
+    @IBOutlet private weak var sunsetTime: UILabel!
+    @IBOutlet private weak var moonriseTime: UILabel!
+    @IBOutlet private weak var moonsetTime: UILabel!
     lazy private var weatherViewModel = WeatherViewModel()
     
     override func viewDidLoad() {
@@ -35,13 +35,13 @@ class WeatherViewController: UIViewController, ErrorReporting {
         bindHomeViewModelErrors()
         bindHomeViewModel()
         weatherViewModel.menu.anchorView = locationView
-        createGesture()
+        setUpDidTapLocationView()
         selectionUponMenu()
         weatherViewModel.loadUserLocationsFromUserDefaults()
     }
     
     private func bindHomeViewModel() {
-        weatherViewModel.didHomeViewModelLoad = { result in
+        weatherViewModel.modelLoad = { result in
             if result {
                 DispatchQueue.main.async {
                     self.cityNameLabel.text = self.weatherViewModel.cityName
@@ -63,16 +63,17 @@ class WeatherViewController: UIViewController, ErrorReporting {
     }
     
     private func addTemperaturesForTheDay() {
-        self.mainTemperature.text = String(self.weatherViewModel.temperature[0]) + Constants.WeatherSymbols.kCelsiusSymbol
+        let measurement = Measurement(value: Double(self.weatherViewModel.temperature[0]), unit: UnitTemperature.celsius)
+        self.mainTemperature.text = measurement.description
         self.maximumTemperatureForTheDay.text = String(self.weatherViewModel.maxTemperature) + Constants.WeatherSymbols.kCelsiusSymbol
         self.minimumTemperatureForTheDay.text = String(self.weatherViewModel.minTemperature) + Constants.WeatherSymbols.kCelsiusSymbol
     }
     
     private func addMiscellaneousInformationToView() {
-        self.sunriseTime.text = weatherViewModel.formattedShortStyleTime(for: TimeInterval(weatherViewModel.sunrise))
-        self.sunsetTime.text = weatherViewModel.formattedShortStyleTime(for: TimeInterval(weatherViewModel.sunset))
-        self.moonriseTime.text = weatherViewModel.formattedShortStyleTime(for: TimeInterval(weatherViewModel.moonrise))
-        self.moonsetTime.text = weatherViewModel.formattedShortStyleTime(for: TimeInterval(weatherViewModel.moonset))
+        self.sunriseTime.text = weatherViewModel.sunrise
+        self.sunsetTime.text = weatherViewModel.sunset
+        self.moonriseTime.text = weatherViewModel.moonrise
+        self.moonsetTime.text = weatherViewModel.moonset
     }
     
     private func selectionUponMenu() {
@@ -81,7 +82,7 @@ class WeatherViewController: UIViewController, ErrorReporting {
         }
     }
     
-    private func createGesture() {
+    private func setUpDidTapLocationView() {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapLocationView))
         gesture.numberOfTapsRequired = 1
         gesture.numberOfTouchesRequired = 1
@@ -105,18 +106,19 @@ class WeatherViewController: UIViewController, ErrorReporting {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.kMiscellaneousIdentifier {
             let destinationVC = segue.destination as? MiscellaneousInformationViewController
-            destinationVC?.gust = String(weatherViewModel.gust) + Constants.WeatherSymbols.kSpeedSymbol
-            destinationVC?.humidity = String(weatherViewModel.humidity) + Constants.WeatherSymbols.kHumiditySymbol
-            destinationVC?.windDegree = String(weatherViewModel.windSpeedDegree) + Constants.WeatherSymbols.kDegreeSymbol
-            destinationVC?.visibility = String(weatherViewModel.visibility) + Constants.WeatherSymbols.kVisibilitySymbol
-            destinationVC?.pressure = String(weatherViewModel.pressure) + Constants.WeatherSymbols.kPressureSymbol
-            destinationVC?.seaLevel = String(weatherViewModel.seaLevel) + Constants.WeatherSymbols.kSeaLevelSymbol
-            destinationVC?.windspeed = String(weatherViewModel.windSpeed) + Constants.WeatherSymbols.kSpeedSymbol
-            destinationVC?.uvProtection = String(weatherViewModel.uvProtection)
-            destinationVC?.sunrise = weatherViewModel.formattedShortStyleTime(for: TimeInterval(weatherViewModel.sunrise))
-            destinationVC?.sunset = weatherViewModel.formattedShortStyleTime(for: TimeInterval(weatherViewModel.sunset))
-            destinationVC?.moonset = weatherViewModel.formattedShortStyleTime(for: TimeInterval(weatherViewModel.moonset))
-            destinationVC?.moonrise = weatherViewModel.formattedShortStyleTime(for: TimeInterval(weatherViewModel.moonrise))
+            
+            destinationVC?.configure(windspeed: String(weatherViewModel.windSpeed) + Constants.WeatherSymbols.kSpeedSymbol,
+                                     gust: String(weatherViewModel.gust) + Constants.WeatherSymbols.kSpeedSymbol,
+                                     windDegree: String(weatherViewModel.windSpeedDegree) + Constants.WeatherSymbols.kDegreeSymbol,
+                                     seaLevel: String(weatherViewModel.seaLevel) + Constants.WeatherSymbols.kSeaLevelSymbol,
+                                     sunrise: weatherViewModel.sunrise,
+                                     sunset: weatherViewModel.sunset)
+            destinationVC?.configure(moonrise: weatherViewModel.moonrise,
+                                     moonset: weatherViewModel.moonset,
+                                     pressure: String(weatherViewModel.pressure) + Constants.WeatherSymbols.kPressureSymbol,
+                                     visibility: String(weatherViewModel.visibility) + Constants.WeatherSymbols.kVisibilitySymbol,
+                                     humidity: String(weatherViewModel.humidity) + Constants.WeatherSymbols.kHumiditySymbol,
+                                     uvProtection: String(weatherViewModel.uvProtection))
         }
     }
 }
@@ -172,9 +174,9 @@ extension WeatherViewController: CLLocationManagerDelegate {
 extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == self.fiveDayForecastCollectionView {
+        if collectionView == fiveDayForecastCollectionView {
             return weatherViewModel.temperature.count
-        } else if collectionView == self.fiveDayCollectionView {
+        } else if collectionView == fiveDayCollectionView {
             return weatherViewModel.oneCallDates.count
         }
         return 1
@@ -184,7 +186,7 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         if collectionView == fiveDayCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellIdentification.kFiveDaysCollectionView,
                                                           for: indexPath) as? FiveDaysCollectionViewCell
-            cell?.configure(date: weatherViewModel.formattedCurrentStyleDate(for: TimeInterval(weatherViewModel.oneCallDates[indexPath.row])),
+            cell?.configure(date: weatherViewModel.UTCDateConvertedToDateFrom(index: indexPath.row),
                             minimumTemperature: String(weatherViewModel.minimumTemperatureOfTheDay[indexPath.row]) + Constants.WeatherSymbols.kCelsiusSymbol,
                             maximumTemperature: String(weatherViewModel.maximumTemperatureOfTheDay[indexPath.row]) + Constants.WeatherSymbols.kCelsiusSymbol,
                             weatherIcon: UIImage(named: weatherViewModel.conditionName[indexPath.row]) ?? UIImage())
@@ -192,8 +194,8 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellIdentification.kForecastCollectionView,
                                                           for: indexPath) as? ForecastCollectionViewCell
-            cell?.configure(date: weatherViewModel.formattedCurrentStyleDate(for: TimeInterval(weatherViewModel.date[indexPath.row])),
-                            time: weatherViewModel.formattedShortStyleTime(for: TimeInterval(weatherViewModel.date[indexPath.row])),
+            cell?.configure(date: weatherViewModel.UTCDateConvertedToDateFrom(index: indexPath.row),
+                            time: weatherViewModel.UNTCTimeConvertedToTimeFrom(index: indexPath.row),
                             iconImage: UIImage(named: weatherViewModel.conditionName[indexPath.row]) ?? UIImage(),
                             temperature: String(weatherViewModel.temperature[indexPath.row]) + Constants.WeatherSymbols.kCelsiusSymbol)
             return cell ?? ForecastCollectionViewCell()
@@ -205,7 +207,7 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
 extension WeatherViewController {
     
     func bindHomeViewModelErrors() {
-        weatherViewModel.homeViewModelError = { result in
+        weatherViewModel.modelError = { result in
             self.showUserErrorMessageDidInitiate(result.localizedDescription)
         }
     }

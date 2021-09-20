@@ -11,8 +11,25 @@ struct WeatherRequest {
     
     var delegateError: ErrorReporting?
     
+//    func URLBiulder(for query: String){
+//
+//    }
     func performFiveDayWeatherRequest(with urlString: String, completion: @escaping (Result<HourlyWeatherDataModel, Error>) -> Void) {
-        if let url = URL(string: urlString) {
+        
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.openweathermap.org"
+        components.path = "/data/2.5/forecast"
+        let quesrtItem = URLQueryItem(name: "q", value: "Benoni")
+        let quesrtItem2 = URLQueryItem(name: "units", value: "metric")
+        let quesrtItem3 = URLQueryItem(name: "appid", value: "142b7217f291c1757ed44fd29411e4b3")
+        components.queryItems = [quesrtItem,quesrtItem2,quesrtItem3]
+        
+         
+        
+        print("helllodfmkdfikogjmikfdojikgbvjfdgv \(components.url)")
+        if let url = components.url {
+            print("\(url)")
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, _, error) in
                 if error != nil {
@@ -62,7 +79,6 @@ struct WeatherRequest {
             for count in 0..<decodedData.daily.count {
                 date.append(decodedData.daily[count].date)
             }
-            print("hksgisbhgiakshbfgijkashbgiawhbvf \(date)")
             
             var maximumTemperature: [Int] = []
             for count in 0..<decodedData.daily.count {

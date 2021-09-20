@@ -22,18 +22,46 @@ class MiscellaneousInformationViewController: UIViewController {
     @IBOutlet weak var humidityLabel: UILabel!
     @IBOutlet weak var uvProtectionLabel: UILabel!
     
-    var windspeed: String?
-    var gust: String?
-    var windDegree: String?
-    var seaLevel: String?
-    var sunrise: String?
-    var sunset: String?
-    var moonrise: String?
-    var moonset: String?
-    var pressure: String?
-    var visibility: String?
-    var humidity: String?
-    var uvProtection: String?
+    private var windspeed: String!
+    private var gust: String!
+    private var windDegree: String!
+    private var seaLevel: String!
+    private var sunrise: String!
+    private var sunset: String!
+    private var moonrise: String!
+    private var moonset: String!
+    private var pressure: String!
+    private var visibility: String!
+    private var humidity: String!
+    private var uvProtection: String!
+    
+    func configure(windspeed convertedWindspeed: String,
+                   gust convertedGust: String,
+                   windDegree convertedWindDegree: String,
+                   seaLevel convertedSeaLevel: String,
+                   sunrise convertedSunrise: String,
+                   sunset convertedSunset: String) {
+        windspeed = convertedWindspeed
+        gust = convertedGust
+        windDegree = convertedWindDegree
+        seaLevel = convertedSeaLevel
+        sunrise = convertedSunrise
+        sunset = convertedSunset
+        
+    }
+    func configure(moonrise convertedMoonrise: String,
+                   moonset convertedMoonset: String,
+                   pressure convertedPressure: String,
+                   visibility convertedVisibility: String,
+                   humidity convertedHumidity: String,
+                   uvProtection convertedUvProtection: String) {
+        moonrise = convertedMoonrise
+        moonset = convertedMoonset
+        pressure = convertedPressure
+        visibility = convertedVisibility
+        humidity = convertedHumidity
+        uvProtection = convertedUvProtection
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

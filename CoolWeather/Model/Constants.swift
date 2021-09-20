@@ -9,6 +9,16 @@ import Foundation
 
 struct Constants {
     
+    func URLBiulder(for query: String) -> URL? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.openweathermap.org"
+        components.path = "/data/2.5/forecast?units=metric&appid=142b7217f291c1757ed44fd29411e4b3&"
+        components.queryItems = [URLQueryItem(name: "/q=", value: query)]
+        
+        return components.url
+    }
+    
     static let kDateFormat = "EEEE"
     static let kMiscellaneousIdentifier = "goToMiscellaneous"
     static let kUserLocations = "UserLocations"
@@ -16,6 +26,7 @@ struct Constants {
     struct WeatherAPI {
         static let kWeatherURL = "https://api.openweathermap.org/data/2.5/forecast?units=metric&appid=142b7217f291c1757ed44fd29411e4b3&"
         static let kOneCallWeatherURL = "https://api.openweathermap.org/data/2.5/onecall?appid=142b7217f291c1757ed44fd29411e4b3&units=metric&exclude=hourly"
+        
     }
     struct CellIdentification {
         static let kFiveDaysCollectionView = "FiveDaysCollectionView"

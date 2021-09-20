@@ -29,15 +29,17 @@ struct OneCallWeatherAPIFormat: Codable {
             case currentTemperature = "temp"
             case uvProtection = "uvi"
         }
+    }
+}
+
+extension OneCallWeatherAPIFormat {
+    struct Temp: Codable {
+        let maximum: Double
+        let minimum: Double
         
-        struct Temp: Codable {
-            let maximum: Double
-            let minimum: Double
-            
-            private enum CodingKeys: String, CodingKey {
-                case maximum = "min"
-                case minimum = "max"
-            }
+        private enum CodingKeys: String, CodingKey {
+            case maximum = "min"
+            case minimum = "max"
         }
     }
 }

@@ -21,12 +21,120 @@ enum WeatherCondition: String {
 
 class WeatherViewModel {
     
-    private static let dateFormatter = DateFormatter()
+    private lazy var dateFormatter = DateFormatter()
     private let weatherRequest = WeatherRequest()
+    let locationManager = CLLocationManager()
+    private let defaults = UserDefaults.standard
+    var userLocations = [""]
+    
     private var weather: HourlyWeatherDataModel?
     private var oneCallAPI: OneCallWeatherDataModel?
-    var didHomeViewModelLoad: ((Bool) -> Void)?
-    var homeViewModelError: ((Error) -> Void)?
+    var modelLoad: ((Bool) -> Void)?
+    var modelError: ((Error) -> Void)?
+    
+    // MARK: - Weather Variables
+    
+    var cityName: String {
+        weather?.cityName ?? ""
+    }
+    
+    var conditionId: [Int] {
+        weather?.conditionId ?? [1]
+    }
+    
+    var conditionName: [String] {
+        weather?.conditionName ?? ["", ""]
+    }
+    
+    var gust: Double {
+        weather?.gust ?? 1.1
+    }
+    
+    var humidity: Int {
+        weather?.humidity ?? 1
+    }
+    
+    var latitude: Double {
+        weather?.latitude ?? 1.1
+    }
+    
+    var longitude: Double {
+        weather?.longitude ?? 1.1
+    }
+    
+    var seaLevel: Int {
+        weather?.seaLevel ?? 1
+    }
+    
+    var maxTemperature: Int {
+        weather?.maxTemperature ?? 1
+    }
+    
+    var minTemperature: Int {
+        weather?.minTemperature ?? 1
+    }
+    
+    var pressure: Int {
+        weather?.pressure ?? 1
+    }
+    
+    var temperature: [Int] {
+        weather?.temperature ?? [1]
+    }
+    
+    var visibility: Int {
+        weather?.visibility ?? 1
+    }
+    
+    var wind: Double {
+        weather?.wind ?? 1.1
+    }
+    
+    var windSpeedDegree: Int {
+        weather?.windSpeedDegree ?? 1
+    }
+    
+    var date: [Int] {
+        weather?.date ?? [1]
+    }
+    
+    var windSpeed: Double {
+        weather?.wind ?? 1.1
+    }
+    
+    var oneCallDates: [Int] {
+        oneCallAPI?.date ?? [1]
+    }
+    
+    var sunrise: String {
+        formattedShortStyleTime(for: TimeInterval(oneCallAPI?.sunrise ?? 1))
+    }
+    
+    var sunset: String {
+        formattedShortStyleTime(for: TimeInterval(oneCallAPI?.sunset ?? 1))
+    }
+    
+    var moonrise: String {
+        formattedShortStyleTime(for: TimeInterval(oneCallAPI?.moonrise ?? 1))
+    }
+    
+    var moonset: String {
+        formattedShortStyleTime(for: TimeInterval(oneCallAPI?.moonset ?? 1))
+    }
+    
+    var maximumTemperatureOfTheDay: [Int] {
+        oneCallAPI?.maximumTemperatureOfTheDay ?? [1]
+    }
+    
+    var minimumTemperatureOfTheDay: [Int] {
+        oneCallAPI?.minimumTemperatureOfTheDay ?? [1]
+    }
+    
+    var uvProtection: Double {
+        oneCallAPI?.uvProtection ?? 1.1
+    }
+    
+    // MARK: - Weather Functions
     
     func searchCurrentWeather(for cityName: String) {
         let URLString = "\(Constants.WeatherAPI.kWeatherURL)q=\(cityName)"
@@ -57,6 +165,7 @@ class WeatherViewModel {
         }
     }
     
+    
     func searchCurrentWeather(_ latitude: CLLocationDegrees, _ longitude: CLLocationDegrees) {
         let URLString = "\(Constants.WeatherAPI.kWeatherURL)lat=\(latitude)&lon=\(longitude)"
         requestWeatherData(with: URLString)
@@ -69,7 +178,7 @@ class WeatherViewModel {
                 self.weather = newWeather
                 self.requestOneWWeatherCallData(String(newWeather.latitude), String(newWeather.longitude))
             } catch {
-                self.homeViewModelError?(error)
+                self.modelError?(error)
             }
         }
     }
@@ -80,9 +189,9 @@ class WeatherViewModel {
             do {
                 let newOneCallWeather = try result.get()
                 self.oneCallAPI = newOneCallWeather
-                self.didHomeViewModelLoad?(true)
+                self.modelLoad?(true)
             } catch {
-                self.homeViewModelError?(error)
+                self.modelError?(error)
             }
         }
     }
@@ -102,8 +211,6 @@ class WeatherViewModel {
     
     // MARK: - Location Manager
     
-    let locationManager = CLLocationManager()
-    
     func requestLocation() {
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
@@ -119,9 +226,6 @@ class WeatherViewModel {
     }
     
     // MARK: - User Defaults
-    
-    let defaults = UserDefaults.standard
-    var userLocations = [""]
     
     func loadUserLocationsFromUserDefaults() {
         if let items = defaults.array(forKey: Constants.kUserLocations) as? [String] {
@@ -143,97 +247,26 @@ class WeatherViewModel {
     
     // MARK: - Conversion of unix UTC to time
     
-    func formattedShortStyleTime(for date: TimeInterval) -> String {
+    private func formattedShortStyleTime(for date: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: Double(date))
-        WeatherViewModel.dateFormatter.timeStyle = DateFormatter.Style.short
-        WeatherViewModel.dateFormatter.timeZone = .current
-        return WeatherViewModel.dateFormatter.string(from: date)
+        dateFormatter.timeStyle = DateFormatter.Style.short
+        dateFormatter.timeZone = .current
+        return dateFormatter.string(from: date)
     }
     
-    func formattedCurrentStyleDate(for date: TimeInterval) -> String {
+    private func formattedCurrentStyleDate(for date: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: Double(date))
         let dateFormate = Constants.kDateFormat
-        WeatherViewModel.dateFormatter.dateFormat = dateFormate
-        WeatherViewModel.dateFormatter.timeZone = .current
-        return WeatherViewModel.dateFormatter.string(from: date)
+        dateFormatter.dateFormat = dateFormate
+        dateFormatter.timeZone = .current
+        return dateFormatter.string(from: date)
     }
     
-    // MARK: - Weather Variables
-    
-    var cityName: String {
-        weather?.cityName ?? ""
-    }
-    var conditionId: [Int] {
-        weather?.conditionId ?? [1]
-    }
-    var conditionName: [String] {
-        weather?.conditionName ?? ["", ""]
-    }
-    var gust: Double {
-        weather?.gust ?? 1.1
-    }
-    var humidity: Int {
-        weather?.humidity ?? 1
-    }
-    var latitude: Double {
-        weather?.latitude ?? 1.1
-    }
-    var longitude: Double {
-        weather?.longitude ?? 1.1
-    }
-    var seaLevel: Int {
-        weather?.seaLevel ?? 1
-    }
-    var maxTemperature: Int {
-        weather?.maxTemperature ?? 1
-    }
-    var minTemperature: Int {
-        weather?.minTemperature ?? 1
-    }
-    var pressure: Int {
-        weather?.pressure ?? 1
-    }
-    var temperature: [Int] {
-        weather?.temperature ?? [1]
-    }
-    var visibility: Int {
-        weather?.visibility ?? 1
-    }
-    var wind: Double {
-        weather?.wind ?? 1.1
-    }
-    var windSpeedDegree: Int {
-        weather?.windSpeedDegree ?? 1
-    }
-    var date: [Int] {
-        weather?.date ?? [1]
-    }
-    var windSpeed: Double {
-        weather?.wind ?? 1.1
+    func UTCDateConvertedToDateFrom(index dateIndex: Int) -> String {
+        formattedCurrentStyleDate(for: TimeInterval(date[dateIndex]))
     }
     
-    var oneCallDates: [Int] {
-        oneCallAPI?.date ?? [1]
-    }
-    var sunrise: Int {
-        oneCallAPI?.sunrise ?? 1
-    }
-    var sunset: Int {
-        oneCallAPI?.sunset ?? 1
-    }
-    var moonrise: Int {
-        oneCallAPI?.moonrise ?? 1
-    }
-    var moonset: Int {
-        oneCallAPI?.moonset ?? 1
-    }
-    var maximumTemperatureOfTheDay: [Int] {
-        oneCallAPI?.maximumTemperatureOfTheDay ?? [1]
-    }
-    var minimumTemperatureOfTheDay: [Int] {
-        oneCallAPI?.minimumTemperatureOfTheDay ?? [1]
-    }
-    var uvProtection: Double {
-        oneCallAPI?.uvProtection ?? 1.1
+    func UNTCTimeConvertedToTimeFrom(index dateIndex: Int) -> String {
+        formattedShortStyleTime(for: TimeInterval(date[dateIndex]))
     }
 }
