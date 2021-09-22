@@ -22,15 +22,35 @@ enum WeatherCondition: String {
 class WeatherViewModel {
     
     private lazy var dateFormatter = DateFormatter()
-    private let weatherRequest = WeatherRequest()
     let locationManager = CLLocationManager()
     private let defaults = UserDefaults.standard
     var userLocations = [""]
-    
     private var weather: HourlyWeatherDataModel?
     private var oneCallAPI: OneCallWeatherDataModel?
+    
+    let weatherRepository = WeatherViewModelRepository()
     var modelLoad: ((Bool) -> Void)?
     var modelError: ((Error) -> Void)?
+    
+    func bindRepository() {
+        weatherRepository.repositoryLoad = { result in
+            if result {
+                self.weather = self.weatherRepository.weather
+                self.oneCallAPI = self.weatherRepository.oneCallAPI
+                self.modelLoad?(true)
+            }
+        }
+    }
+    
+    func searchCurrentWeather(for cityName: String) {
+        weatherRepository.searchCurrentWeather(for: cityName)
+        bindRepository()
+    }
+    
+    func searchCurrentWeather(_ latitude: CLLocationDegrees, _ longitude: CLLocationDegrees) {
+        weatherRepository.searchCurrentWeather(latitude, longitude)
+        bindRepository()
+    }
     
     // MARK: - Weather Variables
     
@@ -134,11 +154,19 @@ class WeatherViewModel {
         oneCallAPI?.uvProtection ?? 1.1
     }
     
-    // MARK: - Weather Functions
-    
-    func searchCurrentWeather(for cityName: String) {
-        let URLString = "\(Constants.WeatherAPI.kWeatherURL)q=\(cityName)"
-        requestWeatherData(with: URLString)
+    func getInfo() -> MiscWeatherData {
+        return MiscWeatherData(windspeed: String(windSpeed),
+                                                 gust: String(gust),
+                                                 windDegree: String(windSpeedDegree),
+                                                 seaLevel: String(seaLevel),
+                                                 sunrise: String(sunrise),
+                                                 sunset: sunset,
+                                                 moonrise: moonrise,
+                                                 moonset: moonset,
+                                                 pressure: String(pressure),
+                                                 visibility: String(visibility),
+                                                 humidity: String(humidity),
+                                                 uvProtection: String(uvProtection))
     }
     
     private var todayWeatherCondition: WeatherCondition? {
@@ -162,37 +190,6 @@ class WeatherViewModel {
             return Constants.WeatherIconImages.kClearSky
         default:
             return Constants.WeatherIconImages.kDefault
-        }
-    }
-    
-    
-    func searchCurrentWeather(_ latitude: CLLocationDegrees, _ longitude: CLLocationDegrees) {
-        let URLString = "\(Constants.WeatherAPI.kWeatherURL)lat=\(latitude)&lon=\(longitude)"
-        requestWeatherData(with: URLString)
-    }
-    
-    private func requestWeatherData(with URLString: String) {
-        weatherRequest.performFiveDayWeatherRequest(with: URLString) { result in
-            do {
-                let newWeather = try result.get()
-                self.weather = newWeather
-                self.requestOneWWeatherCallData(String(newWeather.latitude), String(newWeather.longitude))
-            } catch {
-                self.modelError?(error)
-            }
-        }
-    }
-    
-    private func requestOneWWeatherCallData(_ latitude: String, _ longitude: String) {
-        let URLString = "\(Constants.WeatherAPI.kOneCallWeatherURL)&lat=\(latitude)&lon=\(longitude)"
-        weatherRequest.performOneCallWeatherRequest(with: URLString) { result in
-            do {
-                let newOneCallWeather = try result.get()
-                self.oneCallAPI = newOneCallWeather
-                self.modelLoad?(true)
-            } catch {
-                self.modelError?(error)
-            }
         }
     }
     
@@ -221,7 +218,8 @@ class WeatherViewModel {
             locationManager.stopUpdatingLocation()
             let lat = location.coordinate.latitude
             let lon = location.coordinate.longitude
-            searchCurrentWeather(lat, lon)
+            weatherRepository.searchCurrentWeather(lat, lon)
+            bindRepository()
         }
     }
     

@@ -6,30 +6,56 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct WeatherRequest {
     
     var delegateError: ErrorReporting?
-    
-//    func URLBiulder(for query: String){
-//
-//    }
-    func performFiveDayWeatherRequest(with urlString: String, completion: @escaping (Result<HourlyWeatherDataModel, Error>) -> Void) {
+
+    func URLOneCallAPIBuilder(for latitude: CLLocationDegrees, and longitude: CLLocationDegrees) -> URL? {
         
         var components = URLComponents()
         components.scheme = "https"
         components.host = "api.openweathermap.org"
+        components.path = "/data/2.5/onecall"
+        let latitudeQueryItem = URLQueryItem(name: "lat", value: String(latitude))
+        let longitudeQueryItem = URLQueryItem(name: "lon", value: String(longitude))
+        let excludeQueryItem = URLQueryItem(name: "exclude", value: "hourly")
+        let unitsQueryItem = URLQueryItem(name: "units", value: "metric")
+        let appIDQueryItem = URLQueryItem(name: "appid", value: "142b7217f291c1757ed44fd29411e4b3")
+        components.queryItems = [latitudeQueryItem, longitudeQueryItem, excludeQueryItem, unitsQueryItem, appIDQueryItem]
+        return components.url
+    }
+    
+    func hourlyWeatherAPIURLBuilder(for query: String) -> URL? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.openweathermap.org"
         components.path = "/data/2.5/forecast"
-        let quesrtItem = URLQueryItem(name: "q", value: "Benoni")
-        let quesrtItem2 = URLQueryItem(name: "units", value: "metric")
-        let quesrtItem3 = URLQueryItem(name: "appid", value: "142b7217f291c1757ed44fd29411e4b3")
-        components.queryItems = [quesrtItem,quesrtItem2,quesrtItem3]
+        let cityNameQueryItem = URLQueryItem(name: "q", value: query)
+        let unitsQueryItem = URLQueryItem(name: "units", value: "metric")
+        let appIDQueryItem = URLQueryItem(name: "appid", value: "142b7217f291c1757ed44fd29411e4b3")
+        components.queryItems = [cityNameQueryItem, unitsQueryItem, appIDQueryItem]
         
-         
+        return components.url
+    }
+    
+    func hourlyWeatherAPIURLBuilderLat(for latitude: CLLocationDegrees, and longitude: CLLocationDegrees) -> URL? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.openweathermap.org"
+        components.path = "/data/2.5/forecast"
+        let latitudeQueryItem = URLQueryItem(name: "lat", value: String(latitude))
+        let longitudeQueryItem = URLQueryItem(name: "lon", value: String(longitude))
+        let unitsQueryItem = URLQueryItem(name: "units", value: "metric")
+        let appIDQueryItem = URLQueryItem(name: "appid", value: "142b7217f291c1757ed44fd29411e4b3")
+        components.queryItems = [latitudeQueryItem, longitudeQueryItem, unitsQueryItem, appIDQueryItem]
         
-        print("helllodfmkdfikogjmikfdojikgbvjfdgv \(components.url)")
-        if let url = components.url {
-            print("\(url)")
+        return components.url
+    }
+    
+    func performFiveDayWeatherRequest(for city: String, completion: @escaping (Result<HourlyWeatherDataModel, Error>) -> Void) {
+        if let url = hourlyWeatherAPIURLBuilder(for: city) {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, _, error) in
                 if error != nil {
@@ -46,8 +72,26 @@ struct WeatherRequest {
         }
     }
     
-    func performOneCallWeatherRequest(with urlString: String, completion: @escaping (Result<OneCallWeatherDataModel, Error>) -> Void) {
-        if let url = URL(string: urlString) {
+    func performFiveDayWeatherRequestLat(with latitude: CLLocationDegrees, and longitude: CLLocationDegrees, completion: @escaping (Result<HourlyWeatherDataModel, Error>) -> Void) {
+        if let url = hourlyWeatherAPIURLBuilderLat(for: latitude, and: longitude) {
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: url) { (data, _, error) in
+                if error != nil {
+                    completion(.failure(error!))
+                    return
+                }
+                if let safeData = data {
+                    if let weather = self.parseFiveDayWeatherJSON(safeData) {
+                        completion(.success(weather))
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    func performOneCallWeatherRequest(with latitude: CLLocationDegrees, and longitude: CLLocationDegrees, completion: @escaping (Result<OneCallWeatherDataModel, Error>) -> Void) {
+        if let url = URLOneCallAPIBuilder(for: latitude, and: longitude) {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, _, error) in
                 if error != nil {

@@ -100,26 +100,8 @@ class WeatherViewController: UIViewController, ErrorReporting {
     // MARK: - Passing Data to Miscellaneous ViewController
     
     @IBAction func seeMorePressed(_ sender: UIButton) {
-        self.performSegue(withIdentifier: Constants.kMiscellaneousIdentifier, sender: self)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == Constants.kMiscellaneousIdentifier {
-            let destinationVC = segue.destination as? MiscellaneousInformationViewController
-            
-            destinationVC?.configure(windspeed: String(weatherViewModel.windSpeed) + Constants.WeatherSymbols.kSpeedSymbol,
-                                     gust: String(weatherViewModel.gust) + Constants.WeatherSymbols.kSpeedSymbol,
-                                     windDegree: String(weatherViewModel.windSpeedDegree) + Constants.WeatherSymbols.kDegreeSymbol,
-                                     seaLevel: String(weatherViewModel.seaLevel) + Constants.WeatherSymbols.kSeaLevelSymbol,
-                                     sunrise: weatherViewModel.sunrise,
-                                     sunset: weatherViewModel.sunset)
-            destinationVC?.configure(moonrise: weatherViewModel.moonrise,
-                                     moonset: weatherViewModel.moonset,
-                                     pressure: String(weatherViewModel.pressure) + Constants.WeatherSymbols.kPressureSymbol,
-                                     visibility: String(weatherViewModel.visibility) + Constants.WeatherSymbols.kVisibilitySymbol,
-                                     humidity: String(weatherViewModel.humidity) + Constants.WeatherSymbols.kHumiditySymbol,
-                                     uvProtection: String(weatherViewModel.uvProtection))
-        }
+        let controller = MiscellaneousInformationViewController(mistWeatherData: weatherViewModel.getInfo())
+            show(controller, sender: sender)
     }
 }
 

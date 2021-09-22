@@ -33,6 +33,10 @@
 		7898812826DCEFF9006A3EE1 /* HourlyWeatherAPIFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7898812726DCEFF9006A3EE1 /* HourlyWeatherAPIFormat.swift */; };
 		7898812A26DD1A3A006A3EE1 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7898812926DD1A3A006A3EE1 /* WeatherViewModel.swift */; };
 		78CD87BA26F8AB9300867EED /* Collections+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78CD87B926F8AB9300867EED /* Collections+Extensions.swift */; };
+		78D2E4EA26F9F13A00DB42AE /* MiscWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D2E4E926F9F13A00DB42AE /* MiscWeatherData.swift */; };
+		78D2E4F126FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D2E4EF26FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.swift */; };
+		78D2E4F226FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D2E4F026FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.xib */; };
+		78F3A27B26FB7B99007BC887 /* WeatherViewModelRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F3A27A26FB7B99007BC887 /* WeatherViewModelRepository.swift */; };
 		78FE919326F340B500598BE2 /* WeatherViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE919226F340B500598BE2 /* WeatherViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +89,10 @@
 		7898812726DCEFF9006A3EE1 /* HourlyWeatherAPIFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherAPIFormat.swift; sourceTree = "<group>"; };
 		7898812926DD1A3A006A3EE1 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		78CD87B926F8AB9300867EED /* Collections+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collections+Extensions.swift"; sourceTree = "<group>"; };
+		78D2E4E926F9F13A00DB42AE /* MiscWeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscWeatherData.swift; sourceTree = "<group>"; };
+		78D2E4EF26FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscWeatherInfoCollectionViewCell.swift; sourceTree = "<group>"; };
+		78D2E4F026FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MiscWeatherInfoCollectionViewCell.xib; sourceTree = "<group>"; };
+		78F3A27A26FB7B99007BC887 /* WeatherViewModelRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModelRepository.swift; sourceTree = "<group>"; };
 		78FE919226F340B500598BE2 /* WeatherViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModelTests.swift; sourceTree = "<group>"; };
 		7CA6DB649C4AE9BCFA9FACA2 /* Pods-CoolWeather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoolWeather.debug.xcconfig"; path = "Target Support Files/Pods-CoolWeather/Pods-CoolWeather.debug.xcconfig"; sourceTree = "<group>"; };
 		949B57F93C856E2776226664 /* Pods-CoolWeather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoolWeather.release.xcconfig"; path = "Target Support Files/Pods-CoolWeather/Pods-CoolWeather.release.xcconfig"; sourceTree = "<group>"; };
@@ -221,8 +229,10 @@
 			isa = PBXGroup;
 			children = (
 				7898812926DD1A3A006A3EE1 /* WeatherViewModel.swift */,
+				78F3A27A26FB7B99007BC887 /* WeatherViewModelRepository.swift */,
 				785AE2AF26E0E00700FF9039 /* OneCallWeatherDataModel.swift */,
 				7898812526DCECC5006A3EE1 /* HourlyWeatherDataModel.swift */,
+				78D2E4E926F9F13A00DB42AE /* MiscWeatherData.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -235,6 +245,7 @@
 				780CCA2026DFB08A00C2C535 /* ForecastCollectionViewCell.swift */,
 				785AE2B526E1015900FF9039 /* FiveDaysCollectionViewCell.swift */,
 				782C4B7326E66AAB00B47FBF /* MiscellaneousInformationViewController.swift */,
+				78D2E4EF26FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -244,6 +255,7 @@
 			children = (
 				782A9D9526DCCC0B008B336F /* Main.storyboard */,
 				788F7BB826F2497800A2464F /* DropDownCell.xib */,
+				78D2E4F026FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -359,6 +371,7 @@
 			files = (
 				782A9D9F26DCCC0C008B336F /* LaunchScreen.storyboard in Resources */,
 				782C4B6B26E6040C00B47FBF /* Localizable.strings in Resources */,
+				78D2E4F226FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.xib in Resources */,
 				782A9D9C26DCCC0C008B336F /* Assets.xcassets in Resources */,
 				788F7BB926F2497800A2464F /* DropDownCell.xib in Resources */,
 				782A9D9726DCCC0B008B336F /* Main.storyboard in Resources */,
@@ -512,13 +525,16 @@
 				782C4B7126E605B900B47FBF /* AlertProtocols.swift in Sources */,
 				788F7BBB26F24A2000A2464F /* DropDownCell.swift in Sources */,
 				782A9D9426DCCC0B008B336F /* WeatherViewController.swift in Sources */,
+				78F3A27B26FB7B99007BC887 /* WeatherViewModelRepository.swift in Sources */,
 				78CD87BA26F8AB9300867EED /* Collections+Extensions.swift in Sources */,
 				780CCA2126DFB08A00C2C535 /* ForecastCollectionViewCell.swift in Sources */,
 				785AE2AE26E0D7F800FF9039 /* OneCallWeatherAPIFormat.swift in Sources */,
 				785AE2B626E1015900FF9039 /* FiveDaysCollectionViewCell.swift in Sources */,
 				782A9D9A26DCCC0B008B336F /* CoolWeather.xcdatamodeld in Sources */,
 				7898812A26DD1A3A006A3EE1 /* WeatherViewModel.swift in Sources */,
+				78D2E4F126FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.swift in Sources */,
 				782A9D9026DCCC0B008B336F /* AppDelegate.swift in Sources */,
+				78D2E4EA26F9F13A00DB42AE /* MiscWeatherData.swift in Sources */,
 				782A9DCB26DCDF9F008B336F /* Constants.swift in Sources */,
 				7898812626DCECC5006A3EE1 /* HourlyWeatherDataModel.swift in Sources */,
 				782A9D9226DCCC0B008B336F /* SceneDelegate.swift in Sources */,
