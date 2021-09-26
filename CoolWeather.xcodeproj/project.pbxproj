@@ -23,10 +23,11 @@
 		782A9DCB26DCDF9F008B336F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782A9DCA26DCDF9F008B336F /* Constants.swift */; };
 		782C4B6B26E6040C00B47FBF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 782C4B6D26E6040C00B47FBF /* Localizable.strings */; };
 		782C4B7126E605B900B47FBF /* AlertProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782C4B7026E605B900B47FBF /* AlertProtocols.swift */; };
-		782C4B7426E66AAB00B47FBF /* MiscellaneousInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782C4B7326E66AAB00B47FBF /* MiscellaneousInformationViewController.swift */; };
+		782C4B7426E66AAB00B47FBF /* MiscWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782C4B7326E66AAB00B47FBF /* MiscWeatherViewController.swift */; };
 		785AE2AE26E0D7F800FF9039 /* OneCallWeatherAPIFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785AE2AD26E0D7F800FF9039 /* OneCallWeatherAPIFormat.swift */; };
 		785AE2B026E0E00700FF9039 /* OneCallWeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785AE2AF26E0E00700FF9039 /* OneCallWeatherDataModel.swift */; };
 		785AE2B626E1015900FF9039 /* FiveDaysCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785AE2B526E1015900FF9039 /* FiveDaysCollectionViewCell.swift */; };
+		78719D0C2700D08B00F13751 /* MiscWeatherInfoCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78719D0B2700D08B00F13751 /* MiscWeatherInfoCollectionViewModel.swift */; };
 		788F7BB926F2497800A2464F /* DropDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 788F7BB826F2497800A2464F /* DropDownCell.xib */; };
 		788F7BBB26F24A2000A2464F /* DropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788F7BBA26F24A2000A2464F /* DropDownCell.swift */; };
 		7898812626DCECC5006A3EE1 /* HourlyWeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7898812526DCECC5006A3EE1 /* HourlyWeatherDataModel.swift */; };
@@ -36,6 +37,7 @@
 		78D2E4EA26F9F13A00DB42AE /* MiscWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D2E4E926F9F13A00DB42AE /* MiscWeatherData.swift */; };
 		78D2E4F126FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D2E4EF26FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.swift */; };
 		78D2E4F226FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D2E4F026FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.xib */; };
+		78F2719926FCF7F900F8FB2C /* MiscWeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2719826FCF7F900F8FB2C /* MiscWeatherViewModel.swift */; };
 		78F3A27B26FB7B99007BC887 /* WeatherViewModelRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F3A27A26FB7B99007BC887 /* WeatherViewModelRepository.swift */; };
 		78FE919326F340B500598BE2 /* WeatherViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE919226F340B500598BE2 /* WeatherViewModelTests.swift */; };
 /* End PBXBuildFile section */
@@ -79,10 +81,11 @@
 		782A9DCA26DCDF9F008B336F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		782C4B6C26E6040C00B47FBF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		782C4B7026E605B900B47FBF /* AlertProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertProtocols.swift; sourceTree = "<group>"; };
-		782C4B7326E66AAB00B47FBF /* MiscellaneousInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscellaneousInformationViewController.swift; sourceTree = "<group>"; };
+		782C4B7326E66AAB00B47FBF /* MiscWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscWeatherViewController.swift; sourceTree = "<group>"; };
 		785AE2AD26E0D7F800FF9039 /* OneCallWeatherAPIFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneCallWeatherAPIFormat.swift; sourceTree = "<group>"; };
 		785AE2AF26E0E00700FF9039 /* OneCallWeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneCallWeatherDataModel.swift; sourceTree = "<group>"; };
 		785AE2B526E1015900FF9039 /* FiveDaysCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveDaysCollectionViewCell.swift; sourceTree = "<group>"; };
+		78719D0B2700D08B00F13751 /* MiscWeatherInfoCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscWeatherInfoCollectionViewModel.swift; sourceTree = "<group>"; };
 		788F7BB826F2497800A2464F /* DropDownCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropDownCell.xib; sourceTree = "<group>"; };
 		788F7BBA26F24A2000A2464F /* DropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownCell.swift; sourceTree = "<group>"; };
 		7898812526DCECC5006A3EE1 /* HourlyWeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherDataModel.swift; sourceTree = "<group>"; };
@@ -92,6 +95,7 @@
 		78D2E4E926F9F13A00DB42AE /* MiscWeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscWeatherData.swift; sourceTree = "<group>"; };
 		78D2E4EF26FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscWeatherInfoCollectionViewCell.swift; sourceTree = "<group>"; };
 		78D2E4F026FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MiscWeatherInfoCollectionViewCell.xib; sourceTree = "<group>"; };
+		78F2719826FCF7F900F8FB2C /* MiscWeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscWeatherViewModel.swift; sourceTree = "<group>"; };
 		78F3A27A26FB7B99007BC887 /* WeatherViewModelRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModelRepository.swift; sourceTree = "<group>"; };
 		78FE919226F340B500598BE2 /* WeatherViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModelTests.swift; sourceTree = "<group>"; };
 		7CA6DB649C4AE9BCFA9FACA2 /* Pods-CoolWeather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoolWeather.debug.xcconfig"; path = "Target Support Files/Pods-CoolWeather/Pods-CoolWeather.debug.xcconfig"; sourceTree = "<group>"; };
@@ -233,6 +237,8 @@
 				785AE2AF26E0E00700FF9039 /* OneCallWeatherDataModel.swift */,
 				7898812526DCECC5006A3EE1 /* HourlyWeatherDataModel.swift */,
 				78D2E4E926F9F13A00DB42AE /* MiscWeatherData.swift */,
+				78F2719826FCF7F900F8FB2C /* MiscWeatherViewModel.swift */,
+				78719D0B2700D08B00F13751 /* MiscWeatherInfoCollectionViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -244,7 +250,7 @@
 				782A9D9326DCCC0B008B336F /* WeatherViewController.swift */,
 				780CCA2026DFB08A00C2C535 /* ForecastCollectionViewCell.swift */,
 				785AE2B526E1015900FF9039 /* FiveDaysCollectionViewCell.swift */,
-				782C4B7326E66AAB00B47FBF /* MiscellaneousInformationViewController.swift */,
+				782C4B7326E66AAB00B47FBF /* MiscWeatherViewController.swift */,
 				78D2E4EF26FA01D200DB42AE /* MiscWeatherInfoCollectionViewCell.swift */,
 			);
 			path = Controller;
@@ -268,7 +274,6 @@
 			buildConfigurationList = 782A9DB926DCCC0C008B336F /* Build configuration list for PBXNativeTarget "CoolWeather" */;
 			buildPhases = (
 				EE7548DF7981D467B673B393 /* [CP] Check Pods Manifest.lock */,
-				782C4B7226E6129B00B47FBF /* ShellScript */,
 				782A9D8826DCCC0B008B336F /* Sources */,
 				782A9D8926DCCC0B008B336F /* Frameworks */,
 				782A9D8A26DCCC0B008B336F /* Resources */,
@@ -451,23 +456,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CoolWeather-CoolWeatherUITests/Pods-CoolWeather-CoolWeatherUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		782C4B7226E6129B00B47FBF /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
 		92DFFE5A3B76B7FBC5D35DCB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -519,10 +507,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				782C4B7426E66AAB00B47FBF /* MiscellaneousInformationViewController.swift in Sources */,
+				78F2719926FCF7F900F8FB2C /* MiscWeatherViewModel.swift in Sources */,
+				782C4B7426E66AAB00B47FBF /* MiscWeatherViewController.swift in Sources */,
 				785AE2B026E0E00700FF9039 /* OneCallWeatherDataModel.swift in Sources */,
 				782A9DC926DCDF8B008B336F /* WeatherRequest.swift in Sources */,
 				782C4B7126E605B900B47FBF /* AlertProtocols.swift in Sources */,
+				78719D0C2700D08B00F13751 /* MiscWeatherInfoCollectionViewModel.swift in Sources */,
 				788F7BBB26F24A2000A2464F /* DropDownCell.swift in Sources */,
 				782A9D9426DCCC0B008B336F /* WeatherViewController.swift in Sources */,
 				78F3A27B26FB7B99007BC887 /* WeatherViewModelRepository.swift in Sources */,

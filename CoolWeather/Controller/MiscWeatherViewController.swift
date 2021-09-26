@@ -10,7 +10,7 @@ import UIKit
 class MiscWeatherViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     private let miscellaneousInformationDataModel: MiscWeatherData
-    private var miscWeatherDataList: [String: String] = [:]
+    private var miscWeatherViewModel = MiscWeatherViewModel()
     init(mistWeatherData: MiscWeatherData) {
         self.miscellaneousInformationDataModel = mistWeatherData
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -21,7 +21,7 @@ class MiscWeatherViewController: UICollectionViewController, UICollectionViewDel
     }
     
     override func viewDidLoad() {
-        setMiscWeatherDataList(mistWeatherData: miscellaneousInformationDataModel)
+        miscWeatherViewModel.setMiscWeatherDataList(mistWeatherData: miscellaneousInformationDataModel)
         collectionView.register(UINib(nibName: "MiscWeatherInfoCollectionViewCell", bundle: nil),
                                 forCellWithReuseIdentifier: "Cell")
         collectionView.backgroundView = UIImageView(image: UIImage(named: "IconBackgroud"))
@@ -31,30 +31,16 @@ class MiscWeatherViewController: UICollectionViewController, UICollectionViewDel
         
     }
     
-    func setMiscWeatherDataList(mistWeatherData: MiscWeatherData) {
-        miscWeatherDataList["sunrise"] = mistWeatherData.sunrise
-        miscWeatherDataList["sunset"] = mistWeatherData.sunset
-        miscWeatherDataList["moonrise"] = mistWeatherData.moonrise
-        miscWeatherDataList["moonset"] = mistWeatherData.moonset
-        miscWeatherDataList["uvProtection"] = mistWeatherData.uvProtection
-        miscWeatherDataList["humidity"] = mistWeatherData.humidity
-        miscWeatherDataList["visibility"] = mistWeatherData.visibility
-        miscWeatherDataList["pressure"] = mistWeatherData.pressure
-        miscWeatherDataList["seaLevel"] = mistWeatherData.seaLevel
-        miscWeatherDataList["windspeed"] = mistWeatherData.windspeed
-        miscWeatherDataList["windDegree"] = mistWeatherData.windDegree
-        miscWeatherDataList["gust"] = mistWeatherData.gust
-    }
-    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
                                                       for: indexPath) as? MiscWeatherInfoCollectionViewCell
-        cell?.configure(newLabel: Array(miscWeatherDataList.keys)[indexPath.row], newValue: Array(miscWeatherDataList.values)[indexPath.row])
+        cell?.configure(newLabel: Array(miscWeatherViewModel.miscWeatherDataList.keys)[indexPath.row],
+                        newValue: Array(miscWeatherViewModel.miscWeatherDataList.values)[indexPath.row])
         return cell ?? UICollectionViewCell()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return miscWeatherDataList.count
+        return miscWeatherViewModel.miscWeatherDataList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

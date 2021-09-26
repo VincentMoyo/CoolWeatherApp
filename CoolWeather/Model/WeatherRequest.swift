@@ -7,10 +7,16 @@
 
 import Foundation
 import CoreLocation
+import UIKit
 
 struct WeatherRequest {
     
     var delegateError: ErrorReporting?
+    private let session: URLSession
+
+    init(session: URLSession = .shared) {
+        self.session = session
+    }
 
     func URLOneCallAPIBuilder(for latitude: CLLocationDegrees, and longitude: CLLocationDegrees) -> URL? {
         
@@ -54,9 +60,11 @@ struct WeatherRequest {
         return components.url
     }
     
+
+    
     func performFiveDayWeatherRequest(for city: String, completion: @escaping (Result<HourlyWeatherDataModel, Error>) -> Void) {
         if let url = hourlyWeatherAPIURLBuilder(for: city) {
-            let session = URLSession(configuration: .default)
+            //session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, _, error) in
                 if error != nil {
                     completion(.failure(error!))
@@ -149,7 +157,7 @@ struct WeatherRequest {
         }
     }
     
-    private func parseFiveDayWeatherJSON(_ weatherData: Data) -> HourlyWeatherDataModel? {
+    func parseFiveDayWeatherJSON(_ weatherData: Data) -> HourlyWeatherDataModel? {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(HourlyWeatherAPIFormat.self, from: weatherData)
@@ -232,3 +240,19 @@ struct WeatherRequest {
         }
     }
 }
+
+
+//class ApiFactory {
+//    private let session: URLSession
+//
+//    init(session: URLSession = .shared) {
+//        self.session = session
+//    }
+//
+//    func makeWeatherRequest() -> HourlyAPI {
+//        func requestWeather(from url:URL, then handler: @escaping Handler) {
+//            handler(.success(nil))
+//        }
+//    }
+//
+//}

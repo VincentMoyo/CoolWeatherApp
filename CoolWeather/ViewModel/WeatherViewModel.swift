@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreLocation
-import DropDown
 
 enum WeatherCondition: String {
     case lightning = "Lightning"
@@ -28,9 +27,13 @@ class WeatherViewModel {
     private var weather: HourlyWeatherDataModel?
     private var oneCallAPI: OneCallWeatherDataModel?
     
-    let weatherRepository = WeatherViewModelRepository()
+    private var weatherRepository: WeatherViewModelRepository
     var modelLoad: ((Bool) -> Void)?
     var modelError: ((Error) -> Void)?
+    
+    init(weatherRepository: WeatherViewModelRepository = WeatherViewModelRepository()) {
+        self.weatherRepository = weatherRepository
+    }
     
     func bindRepository() {
         weatherRepository.repositoryLoad = { result in
@@ -86,12 +89,12 @@ class WeatherViewModel {
         weather?.seaLevel ?? 1
     }
     
-    var maxTemperature: Int {
-        weather?.maxTemperature ?? 1
+    var maxTemperature: String {
+        Measurement(value: Double(weather?.maxTemperature ?? 0), unit: UnitTemperature.celsius).description
     }
     
-    var minTemperature: Int {
-        weather?.minTemperature ?? 1
+    var minTemperature: String {
+        Measurement(value: Double(weather?.minTemperature ?? 0), unit: UnitTemperature.celsius).description
     }
     
     var pressure: Int {
@@ -99,7 +102,7 @@ class WeatherViewModel {
     }
     
     var temperature: [Int] {
-        weather?.temperature ?? [1]
+        weather?.temperature ?? []
     }
     
     var visibility: Int {
@@ -193,19 +196,6 @@ class WeatherViewModel {
         }
     }
     
-    // MARK: - Drop Down Menu
-    
-    let menu: DropDown = {
-        let menu = DropDown()
-        menu.cellNib = UINib(nibName: "DropDownCell", bundle: nil)
-        menu.customCellConfiguration = {_, _, cell in
-            guard let cell = cell as? UserLocationsDropDownCell else {
-                return
-            }
-        }
-        return menu
-    }()
-    
     // MARK: - Location Manager
     
     func requestLocation() {
@@ -260,11 +250,44 @@ class WeatherViewModel {
         return dateFormatter.string(from: date)
     }
     
-    func UTCDateConvertedToDateFrom(index dateIndex: Int) -> String {
-        formattedCurrentStyleDate(for: TimeInterval(date[dateIndex]))
+    func UTCDateConvertedToDateFrom(index dateIndex: Int) -> String? {
+        guard let selectedDate = weather?.date else {return ""}
+        return formattedCurrentStyleDate(for: TimeInterval(selectedDate [safe: dateIndex]!))
     }
     
-    func UNTCTimeConvertedToTimeFrom(index dateIndex: Int) -> String {
-        formattedShortStyleTime(for: TimeInterval(date[dateIndex]))
+    func UNTCTimeConvertedToTimeFrom(index timeIndex: Int) -> String? {
+        guard let selectedTime = weather?.date else {return ""}
+        return formattedShortStyleTime(for: TimeInterval(selectedTime [safe: timeIndex]!))
+    }
+    
+    func convertIntToTemperature(_ temperature: Int) -> String {
+        let measurement = Measurement(value: Double(temperature), unit: UnitTemperature.celsius)
+        return measurement.description
+    }
+}
+
+extension WeatherViewModel {
+    
+    func temperature(at index: Int) -> String? {
+        guard let temperature = weather?.temperature else {return ""}
+        let measurement = Measurement(value: Double(temperature[safe: index]!), unit: UnitTemperature.celsius)
+        return measurement.description
+    }
+    
+    func minimumTemperatureAtDate(at index: Int) -> String? {
+        guard let temperature = oneCallAPI?.minimumTemperatureOfTheDay else {return ""}
+        let measurement = Measurement(value: Double(temperature[safe: index]!), unit: UnitTemperature.celsius)
+        return measurement.description
+    }
+    
+    func maximumTemperatureAtDate(at index: Int) -> String? {
+        guard let temperature = oneCallAPI?.maximumTemperatureOfTheDay else {return ""}
+        let measurement = Measurement(value: Double(temperature[safe: index]!), unit: UnitTemperature.celsius)
+        return measurement.description
+    }
+    
+    func conditionNameAtDate(at index: Int) -> String? {
+        guard let temperature = weather?.conditionName else {return "notAvailable"}
+        return temperature[safe: index]
     }
 }

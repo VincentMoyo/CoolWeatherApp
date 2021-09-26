@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreLocation
+import DropDown
 
 class WeatherViewController: UIViewController, ErrorReporting {
     
@@ -24,7 +25,9 @@ class WeatherViewController: UIViewController, ErrorReporting {
     @IBOutlet private weak var sunsetTime: UILabel!
     @IBOutlet private weak var moonriseTime: UILabel!
     @IBOutlet private weak var moonsetTime: UILabel!
-    lazy private var weatherViewModel = WeatherViewModel()
+    lazy private var weatherViewModel = WeatherViewModel(weatherRepository: WeatherViewModelRepository())
+    
+    var hopeFullness = WeatherViewModelRepository()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +37,7 @@ class WeatherViewController: UIViewController, ErrorReporting {
         weatherViewModel.requestLocation()
         bindHomeViewModelErrors()
         bindHomeViewModel()
-        weatherViewModel.menu.anchorView = locationView
+        menu.anchorView = locationView
         setUpDidTapLocationView()
         selectionUponMenu()
         weatherViewModel.loadUserLocationsFromUserDefaults()
@@ -63,10 +66,13 @@ class WeatherViewController: UIViewController, ErrorReporting {
     }
     
     private func addTemperaturesForTheDay() {
-        let measurement = Measurement(value: Double(self.weatherViewModel.temperature[0]), unit: UnitTemperature.celsius)
-        self.mainTemperature.text = measurement.description
-        self.maximumTemperatureForTheDay.text = String(self.weatherViewModel.maxTemperature) + Constants.WeatherSymbols.kCelsiusSymbol
-        self.minimumTemperatureForTheDay.text = String(self.weatherViewModel.minTemperature) + Constants.WeatherSymbols.kCelsiusSymbol
+        guard let temperature = weatherViewModel.temperature(at: 0) else {
+            return
+        }
+        
+        self.mainTemperature.text = temperature
+        self.maximumTemperatureForTheDay.text = self.weatherViewModel.maxTemperature
+        self.minimumTemperatureForTheDay.text = self.weatherViewModel.minTemperature
     }
     
     private func addMiscellaneousInformationToView() {
@@ -77,7 +83,7 @@ class WeatherViewController: UIViewController, ErrorReporting {
     }
     
     private func selectionUponMenu() {
-        weatherViewModel.menu.selectionAction = {index, title in
+        menu.selectionAction = {index, title in
             self.locationSelected(title, index)
         }
     }
@@ -90,7 +96,7 @@ class WeatherViewController: UIViewController, ErrorReporting {
     }
     
     @objc func didTapLocationView() {
-        weatherViewModel.menu.show()
+        menu.show()
     }
     
     @IBAction func currentLocationPressed(_ sender: Any) {
@@ -100,7 +106,7 @@ class WeatherViewController: UIViewController, ErrorReporting {
     // MARK: - Passing Data to Miscellaneous ViewController
     
     @IBAction func seeMorePressed(_ sender: UIButton) {
-        let controller = MiscellaneousInformationViewController(mistWeatherData: weatherViewModel.getInfo())
+        let controller = MiscWeatherViewController(mistWeatherData: weatherViewModel.getInfo())
             show(controller, sender: sender)
     }
 }
@@ -152,6 +158,19 @@ extension WeatherViewController: CLLocationManagerDelegate {
     }
 }
 
+// MARK: - Drop Down Menu
+
+let menu: DropDown = {
+    let menu = DropDown()
+    menu.cellNib = UINib(nibName: "DropDownCell", bundle: nil)
+    menu.customCellConfiguration = {_, _, cell in
+        guard let cell = cell as? UserLocationsDropDownCell else {
+            return
+        }
+    }
+    return menu
+}()
+
 // MARK: - CollectionView
 extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -168,21 +187,37 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         if collectionView == fiveDayCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellIdentification.kFiveDaysCollectionView,
                                                           for: indexPath) as? FiveDaysCollectionViewCell
-            cell?.configure(date: weatherViewModel.UTCDateConvertedToDateFrom(index: indexPath.row),
-                            minimumTemperature: String(weatherViewModel.minimumTemperatureOfTheDay[indexPath.row]) + Constants.WeatherSymbols.kCelsiusSymbol,
-                            maximumTemperature: String(weatherViewModel.maximumTemperatureOfTheDay[indexPath.row]) + Constants.WeatherSymbols.kCelsiusSymbol,
-                            weatherIcon: UIImage(named: weatherViewModel.conditionName[indexPath.row]) ?? UIImage())
+            
+            guard let minimumTemperateAtCurrentDate = weatherViewModel.minimumTemperatureAtDate(at: indexPath.row),
+                  let maximumTemperateAtCurrentDate = weatherViewModel.maximumTemperatureAtDate(at: indexPath.row),
+                  let conditionName = weatherViewModel.conditionNameAtDate(at: indexPath.row),
+                  let currentSelectedDate = weatherViewModel.UTCDateConvertedToDateFrom(index: indexPath.row)
+            else {
+                return ForecastCollectionViewCell()}
+            
+            cell?.configure(date: currentSelectedDate,
+                            minimumTemperature: minimumTemperateAtCurrentDate,
+                            maximumTemperature: maximumTemperateAtCurrentDate,
+                            weatherIcon: UIImage(named: conditionName) ?? UIImage())
             return cell ?? FiveDaysCollectionViewCell()
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellIdentification.kForecastCollectionView,
                                                           for: indexPath) as? ForecastCollectionViewCell
-            cell?.configure(date: weatherViewModel.UTCDateConvertedToDateFrom(index: indexPath.row),
-                            time: weatherViewModel.UNTCTimeConvertedToTimeFrom(index: indexPath.row),
-                            iconImage: UIImage(named: weatherViewModel.conditionName[indexPath.row]) ?? UIImage(),
-                            temperature: String(weatherViewModel.temperature[indexPath.row]) + Constants.WeatherSymbols.kCelsiusSymbol)
+            
+            guard let temperature = weatherViewModel.temperature(at: indexPath.row),
+                  let conditionName = weatherViewModel.conditionNameAtDate(at: indexPath.row),
+                  let currentSelectedDate = weatherViewModel.UTCDateConvertedToDateFrom(index: indexPath.row),
+                  let currentSelectedTime = weatherViewModel.UNTCTimeConvertedToTimeFrom(index: indexPath.row)
+            else {
+                return ForecastCollectionViewCell()}
+            
+            cell?.configure(date: currentSelectedDate,
+                            time: currentSelectedTime,
+                            iconImage: UIImage(named: conditionName) ?? UIImage(),
+                            temperature: temperature)
             return cell ?? ForecastCollectionViewCell()
         }
-    }
+    } 
 }
 
 // MARK: - Error handling
