@@ -9,16 +9,6 @@ import Foundation
 
 struct Constants {
     
-    func URLBiulder(for query: String) -> URL? {
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "api.openweathermap.org"
-        components.path = "/data/2.5/forecast?units=metric&appid=142b7217f291c1757ed44fd29411e4b3&"
-        components.queryItems = [URLQueryItem(name: "/q=", value: query)]
-        
-        return components.url
-    }
-    
     static let kDateFormat = "EEEE"
     static let kMiscellaneousIdentifier = "goToMiscellaneous"
     static let kUserLocations = "UserLocations"
@@ -26,6 +16,7 @@ struct Constants {
     struct WeatherAPI {
         static let kWeatherURL = "https://api.openweathermap.org/data/2.5/forecast?units=metric&appid=142b7217f291c1757ed44fd29411e4b3&"
         static let kOneCallWeatherURL = "https://api.openweathermap.org/data/2.5/onecall?appid=142b7217f291c1757ed44fd29411e4b3&units=metric&exclude=hourly"
+        static let kURLString = "https://api.openweathermap.org/data/2.5/forecast?units=metric&appid=142b7217f291c1757ed44fd29411e4b3&q=benoni"
         
     }
     struct CellIdentification {
@@ -63,5 +54,19 @@ struct Constants {
         static let kSearch = "Search"
         static let kDelete = "Delete"
         static let kPlaceholder = "Please a city"
+    }
+    struct miscWeatherList {
+        static let kSunrise = "sunrise"
+        static let kSunset = "sunset"
+        static let kMoonrise = "moonrise"
+        static let kMoonset = "moonset"
+        static let kUvProtection = "uvProtection"
+        static let kHumidity = "humidity"
+        static let kVisibility = "visibility"
+        static let kPressure = "pressure"
+        static let kSeaLevel = "seaLevel"
+        static let kWindspeed = "windspeed"
+        static let kWindDegree = "windDegree"
+        static let kGust = "gust"
     }
 }

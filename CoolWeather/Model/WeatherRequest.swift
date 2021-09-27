@@ -12,14 +12,8 @@ import UIKit
 struct WeatherRequest {
     
     var delegateError: ErrorReporting?
-    private let session: URLSession
-
-    init(session: URLSession = .shared) {
-        self.session = session
-    }
 
     func URLOneCallAPIBuilder(for latitude: CLLocationDegrees, and longitude: CLLocationDegrees) -> URL? {
-        
         var components = URLComponents()
         components.scheme = "https"
         components.host = "api.openweathermap.org"
@@ -64,7 +58,7 @@ struct WeatherRequest {
     
     func performFiveDayWeatherRequest(for city: String, completion: @escaping (Result<HourlyWeatherDataModel, Error>) -> Void) {
         if let url = hourlyWeatherAPIURLBuilder(for: city) {
-            //session = URLSession(configuration: .default)
+            let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, _, error) in
                 if error != nil {
                     completion(.failure(error!))
@@ -113,6 +107,21 @@ struct WeatherRequest {
                 }
             }
             task.resume()
+        }
+    }
+    
+    func performURLSession(for session: URLSession, completion: @escaping (Result<Data, Error>) -> Void) {
+        if let url = URL(string: Constants.WeatherAPI.kURLString) {
+        let task = session.dataTask(with: url) { (data, _, error) in
+            if error != nil {
+                completion(.failure(error!))
+                return
+            }
+            if let safeData = data {
+                completion(.success(safeData))
+            }
+        }
+        task.resume()
         }
     }
     
@@ -240,19 +249,3 @@ struct WeatherRequest {
         }
     }
 }
-
-
-//class ApiFactory {
-//    private let session: URLSession
-//
-//    init(session: URLSession = .shared) {
-//        self.session = session
-//    }
-//
-//    func makeWeatherRequest() -> HourlyAPI {
-//        func requestWeather(from url:URL, then handler: @escaping Handler) {
-//            handler(.success(nil))
-//        }
-//    }
-//
-//}

@@ -11,11 +11,11 @@ import XCTest
 class WeatherViewModelTests: XCTestCase {
         
     var implementationUnderTests: WeatherViewModel!
-    var weatherRequestRepository: WeatherViewModelRepository!
+    var weatherRequest: WeatherRequest!
     
     override func setUpWithError() throws {
         implementationUnderTests = WeatherViewModel()
-        weatherRequestRepository = WeatherViewModelRepository()
+        weatherRequest = WeatherRequest()
     }
     
     func testCitySearch() {
@@ -44,7 +44,7 @@ class WeatherViewModelTests: XCTestCase {
         let mockSession = URLSessionMock()
         mockSession.data = "testingData".data(using: .ascii)
         let waitingForCompletionException = expectation(description: "Waiting for Open Weather API to respond using coordinates")
-        weatherRequestRepository.performURLSession(for: mockSession) { result in
+        weatherRequest.performURLSession(for: mockSession) { result in
             waitingForCompletionException.fulfill()
         }
         wait(for: [waitingForCompletionException], timeout: 5)

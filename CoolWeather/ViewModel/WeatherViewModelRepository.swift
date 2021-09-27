@@ -52,19 +52,4 @@ class WeatherViewModelRepository {
             }
         }
     }
-    
-    func performURLSession(for session: URLSession, completion: @escaping (Result<Data, Error>) -> Void) {
-        if let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?units=metric&appid=142b7217f291c1757ed44fd29411e4b3&q=benoni") {
-        let task = session.dataTask(with: url) { (data, _, error) in
-            if error != nil {
-                completion(.failure(error!))
-                return
-            }
-            if let safeData = data {
-                completion(.success(safeData))
-            }
-        }
-        task.resume()
-        }
-    }
 }

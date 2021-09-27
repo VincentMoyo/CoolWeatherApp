@@ -24,7 +24,6 @@ class MiscWeatherInfoCollectionViewCell: UICollectionViewCell {
         labelData.text = labelsData
     }
 }
-
 enum Icon: String {
     case windspeed
     case pressure
