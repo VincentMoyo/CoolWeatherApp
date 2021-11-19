@@ -13,8 +13,8 @@ This is a weather application the provides a detailed weather forecast for the c
 
 ## Screenshots
 <p float="left">
-<img src="https://user-images.githubusercontent.com/80006278/142461053-c87d0555-1098-4d22-8e8a-fdec7d046d5c.png" width="400" height="800" />
-<img src="https://user-images.githubusercontent.com/80006278/142679744-62b47ee5-9cc0-4424-87a4-70c01ec6b8de.png" width="400" height="800" />
+<img src="https://user-images.githubusercontent.com/80006278/142461053-c87d0555-1098-4d22-8e8a-fdec7d046d5c.png" width="500" height="800" />
+<img src="https://user-images.githubusercontent.com/80006278/142679744-62b47ee5-9cc0-4424-87a4-70c01ec6b8de.png" width="500" height="800" />
 </p>
 <p float="left">
 <img src="https://user-images.githubusercontent.com/80006278/142679903-da0bb522-e904-4f8a-9950-2cb06cd4c386.png" width="500" height="800" />
