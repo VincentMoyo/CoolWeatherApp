@@ -12,7 +12,7 @@ This is a weather application the provides a detailed weather forecast for the c
 - https://openweather.com
 ## Screenshots
 
-<img src="https://user-images.githubusercontent.com/80006278/142461053-c87d0555-1098-4d22-8e8a-fdec7d046d5c.png" width="300" height="250" />
+<img src="https://user-images.githubusercontent.com/80006278/142461053-c87d0555-1098-4d22-8e8a-fdec7d046d5c.png" width="500" height="700" />
 
 
 ![Simulator Screen Shot - iPhone 12 Pro Max - 2021-11-18 at 18 56 14](https://user-images.githubusercontent.com/80006278/142461053-c87d0555-1098-4d22-8e8a-fdec7d046d5c.png)
