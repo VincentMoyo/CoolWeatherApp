@@ -18,6 +18,9 @@ This is a weather application the provides a detailed weather forecast for the c
 </p>
 <p float="left">
 <img src="https://user-images.githubusercontent.com/80006278/142679903-da0bb522-e904-4f8a-9950-2cb06cd4c386.png" width="500" height="800" />
-<img src="https://user-images.githubusercontent.com/80006278/142461073-dfc103c9-68d9-4b8b-91eb-64eb39c86098.png" width="500" height="800" />
+<img src="https://user-images.githubusercontent.com/80006278/142680863-7b03bc86-6994-44c0-bdad-b3c0168a149f.png" width="500" height="800" />
 </p>
+<p float="left">
+<img src="https://user-images.githubusercontent.com/80006278/142461073-dfc103c9-68d9-4b8b-91eb-64eb39c86098.png" width="500" height="800" />
 <img src="https://user-images.githubusercontent.com/80006278/142680142-0a5887a1-cf89-4259-92c0-2284e211b6f9.png" width="500" height="800" />
+</p>
