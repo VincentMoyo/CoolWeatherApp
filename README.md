@@ -8,7 +8,6 @@ This is a weather application the provides a detailed weather forecast for the c
 - MVVM Architecture
 - Swift
 - Core Location
-- 
 
 ## APIs
 - https://openweather.com
