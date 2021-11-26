@@ -7,6 +7,8 @@ This is a weather application the provides a detailed weather forecast for the c
 - Getting data from restful API
 - MVVM Architecture
 - Swift
+- Core Location
+- 
 
 ## APIs
 - https://openweather.com
