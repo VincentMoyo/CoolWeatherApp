@@ -18,40 +18,63 @@ enum WeatherCondition: String {
     case notAvailable = "Not Available"
 }
 
-class WeatherViewModel {
+class WeatherViewModel: NSObject, CLLocationManagerDelegate {
     
     private lazy var dateFormatter = DateFormatter()
-    let locationManager = CLLocationManager()
+    private let locationManager = CLLocationManager()
     private let defaults = UserDefaults.standard
-    var userLocations = [""]
+    private (set) var userLocations = [""]
     private var weather: HourlyWeatherDataModel?
     private var oneCallAPI: OneCallWeatherDataModel?
     
-    private var weatherRepository: WeatherViewModelRepository
+    private var weatherRepository: WeatherRepositoryProtocol
     var modelLoad: ((Bool) -> Void)?
     var modelError: ((Error) -> Void)?
     
-    init(weatherRepository: WeatherViewModelRepository = WeatherViewModelRepository()) {
+    
+    init(weatherRepository: WeatherRepositoryProtocol = WeatherRepository()) {
         self.weatherRepository = weatherRepository
+    }
+    
+    func loadLocationDelegate() {
+        locationManager.delegate = self
+    }
+    
+    func removeCityFromDefaults(at index: Int) {
+        userLocations.remove(at: index)
     }
     
     func bindRepository() {
         weatherRepository.repositoryLoad = { result in
             if result {
-                self.weather = self.weatherRepository.weather
-                self.oneCallAPI = self.weatherRepository.oneCallAPI
                 self.modelLoad?(true)
             }
         }
     }
     
     func searchCurrentWeather(for cityName: String) {
-        weatherRepository.searchCurrentWeather(for: cityName)
+        weatherRepository.searchCurrentWeather(for: cityName) {result in
+            do {
+                let newModel = try result.get()
+                self.weather = newModel.1
+                self.oneCallAPI = newModel.0
+            } catch {
+                self.modelError?(error)
+            }
+        }
         bindRepository()
     }
     
     func searchCurrentWeather(_ latitude: CLLocationDegrees, _ longitude: CLLocationDegrees) {
-        weatherRepository.searchCurrentWeather(latitude, longitude)
+        weatherRepository.searchCurrentWeather(latitude, longitude) {result in
+            do {
+                let newModel = try result.get()
+                self.weather = newModel.1
+                self.oneCallAPI = newModel.0
+            } catch {
+                self.modelError?(error)
+            }
+        }
         bindRepository()
     }
     
@@ -130,19 +153,19 @@ class WeatherViewModel {
     }
     
     var sunrise: String {
-        formattedShortStyleTime(for: TimeInterval(oneCallAPI?.sunrise ?? 1))
+        formattedShortStyleTimeFor(timeInterval: oneCallAPI?.sunrise ?? 1)
     }
     
     var sunset: String {
-        formattedShortStyleTime(for: TimeInterval(oneCallAPI?.sunset ?? 1))
+        formattedShortStyleTimeFor(timeInterval: oneCallAPI?.sunset ?? 1)
     }
     
     var moonrise: String {
-        formattedShortStyleTime(for: TimeInterval(oneCallAPI?.moonrise ?? 1))
+        formattedShortStyleTimeFor(timeInterval: oneCallAPI?.moonrise ?? 1)
     }
     
     var moonset: String {
-        formattedShortStyleTime(for: TimeInterval(oneCallAPI?.moonset ?? 1))
+        formattedShortStyleTimeFor(timeInterval: oneCallAPI?.moonset ?? 1)
     }
     
     var maximumTemperatureOfTheDay: [Int] {
@@ -157,19 +180,19 @@ class WeatherViewModel {
         oneCallAPI?.uvProtection ?? 1.1
     }
     
-    func getInfo() -> MiscWeatherData {
-        return MiscWeatherData(windspeed: String(windSpeed),
-                                                 gust: String(gust),
-                                                 windDegree: String(windSpeedDegree),
-                                                 seaLevel: String(seaLevel),
-                                                 sunrise: String(sunrise),
-                                                 sunset: sunset,
-                                                 moonrise: moonrise,
-                                                 moonset: moonset,
-                                                 pressure: String(pressure),
-                                                 visibility: String(visibility),
-                                                 humidity: String(humidity),
-                                                 uvProtection: String(uvProtection))
+    func retrieveMiscWeatherData() -> MiscWeatherData {
+        MiscWeatherData(windspeed: String(windSpeed),
+                        gust: String(gust),
+                        windDegree: String(windSpeedDegree),
+                        seaLevel: String(seaLevel),
+                        sunrise: String(sunrise),
+                        sunset: sunset,
+                        moonrise: moonrise,
+                        moonset: moonset,
+                        pressure: String(pressure),
+                        visibility: String(visibility),
+                        humidity: String(humidity),
+                        uvProtection: String(uvProtection))
     }
     
     private var todayWeatherCondition: WeatherCondition? {
@@ -177,7 +200,7 @@ class WeatherViewModel {
         return WeatherCondition(rawValue: condition)
     }
     
-    func backGroundImagesName() -> String {
+    var backGroundImagesName: String {
         switch todayWeatherCondition {
         case .lightning:
             return Constants.WeatherIconImages.kCloudBolt
@@ -203,12 +226,24 @@ class WeatherViewModel {
         locationManager.requestLocation()
     }
     
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        modelError!(error)
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             locationManager.stopUpdatingLocation()
             let lat = location.coordinate.latitude
             let lon = location.coordinate.longitude
-            weatherRepository.searchCurrentWeather(lat, lon)
+            weatherRepository.searchCurrentWeather(lat, lon)  {result in
+                do {
+                    let newModel = try result.get()
+                    self.weather = newModel.1
+                    self.oneCallAPI = newModel.0
+                } catch {
+                    self.modelError?(error)
+                }
+            }
             bindRepository()
         }
     }
@@ -235,15 +270,15 @@ class WeatherViewModel {
     
     // MARK: - Conversion of unix UTC to time
     
-    private func formattedShortStyleTime(for date: TimeInterval) -> String {
-        let date = Date(timeIntervalSince1970: Double(date))
+    private func formattedShortStyleTimeFor(timeInterval date: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(date))
         dateFormatter.timeStyle = DateFormatter.Style.short
         dateFormatter.timeZone = .current
         return dateFormatter.string(from: date)
     }
     
-    private func formattedCurrentStyleDate(for date: TimeInterval) -> String {
-        let date = Date(timeIntervalSince1970: Double(date))
+    private func formattedCurrentStyleDateFor(timeInterval date: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(date))
         let dateFormate = Constants.kDateFormat
         dateFormatter.dateFormat = dateFormate
         dateFormatter.timeZone = .current
@@ -252,12 +287,17 @@ class WeatherViewModel {
     
     func UTCDateConvertedToDateFrom(index dateIndex: Int) -> String? {
         guard let selectedDate = weather?.date else {return ""}
-        return formattedCurrentStyleDate(for: TimeInterval(selectedDate [safe: dateIndex]!))
+        return formattedCurrentStyleDateFor(timeInterval: selectedDate [safe: dateIndex]!)
+    }
+    
+    func UTCOneCallDateConvertedToDateFrom(index dateIndex: Int) -> String? {
+        guard let selectedDate = oneCallAPI?.date else {return ""}
+        return formattedCurrentStyleDateFor(timeInterval: selectedDate [safe: dateIndex]!)
     }
     
     func UNTCTimeConvertedToTimeFrom(index timeIndex: Int) -> String? {
         guard let selectedTime = weather?.date else {return ""}
-        return formattedShortStyleTime(for: TimeInterval(selectedTime [safe: timeIndex]!))
+        return formattedShortStyleTimeFor(timeInterval: selectedTime [safe: timeIndex]!)
     }
     
     func convertIntToTemperature(_ temperature: Int) -> String {

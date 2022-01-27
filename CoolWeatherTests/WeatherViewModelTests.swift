@@ -10,71 +10,45 @@ import XCTest
 
 class WeatherViewModelTests: XCTestCase {
         
-    var implementationUnderTests: WeatherViewModel!
+    var implementationUnderTests: WeatherRepositoryProtocol!
     var weatherRequest: WeatherRequest!
     
     override func setUpWithError() throws {
-        implementationUnderTests = WeatherViewModel()
+        implementationUnderTests = MockedViewModel()
         weatherRequest = WeatherRequest()
     }
     
+//    func testCoordinateSearch() {
+//        let waitingForCompletionException = expectation(description: "Waiting for searchWeather function to complete")
+//        implementationUnderTests.repositoryLoad = { result in
+//            if result {
+//                waitingForCompletionException.fulfill()
+//            }
+//        }
+//        implementationUnderTests.searchCurrentWeather(for: "Benoni")
+//        wait(for: [waitingForCompletionException], timeout: 5)
+//    }
+    
     func testCitySearch() {
         let waitingForCompletionException = expectation(description: "Waiting for Open Weather API to respond using city name")
+        implementationUnderTests.repositoryLoad = { result in
+            if result {
+                waitingForCompletionException.fulfill()
+            }
+        }
         implementationUnderTests.searchCurrentWeather(for: "Benoni")
-        implementationUnderTests.modelLoad = { result in
-            if result {
-                waitingForCompletionException.fulfill()
-            }
-        }
         wait(for: [waitingForCompletionException], timeout: 5)
     }
-    
-    func testCoordinatesSearch() {
-        let waitingForCompletionException = expectation(description: "Waiting for Open Weather API to respond using coordinates")
-        implementationUnderTests.searchCurrentWeather(-26.11898, 28.37386)
-        implementationUnderTests.modelLoad = { result in
-            if result {
-                waitingForCompletionException.fulfill()
-            }
-        }
-        wait(for: [waitingForCompletionException], timeout: 5)
-    }
-    
-    func testUsingMock() {
-        let mockSession = URLSessionMock()
-        mockSession.data = "testingData".data(using: .ascii)
-        let waitingForCompletionException = expectation(description: "Waiting for Open Weather API to respond using coordinates")
-        weatherRequest.performURLSession(for: mockSession) { result in
-            waitingForCompletionException.fulfill()
-        }
-        wait(for: [waitingForCompletionException], timeout: 5)
-    }
+
+//    func testCoordinatesSearch() {
+//        let waitingForCompletionException = expectation(description: "Waiting for Open Weather API to respond using coordinates")
+//        implementationUnderTests.searchCurrentWeather(-26.11898, 28.37386)
+//        implementationUnderTests.modelLoad = { result in
+//            if result {
+//                waitingForCompletionException.fulfill()
+//            }
+//        }
+//        wait(for: [waitingForCompletionException], timeout: 5)
+//    }
 }
 
-class URLSessionDataTaskMock: URLSessionDataTask {
-    private let closure: () -> Void
-        init(closure: @escaping () -> Void) {
-            self.closure = closure
-        }
-        // override resume and call the closure
-
-        override func resume() {
-            closure()
-        }
-}
-
-class URLSessionMock: URLSession {
-    typealias CompletionHandler = (Data?, URLResponse?, Error?) -> Void
-    var data: Data?
-    var error: Error?
-    override func dataTask(
-        with url: URL,
-        completionHandler: @escaping CompletionHandler
-        ) -> URLSessionDataTask {
-        let data = self.data
-        let error = self.error
-        return URLSessionDataTaskMock {
-            completionHandler(data, nil, error)
-        }
-    }
-}

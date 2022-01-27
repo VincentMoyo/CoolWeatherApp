@@ -9,21 +9,24 @@ import UIKit
 
 class MiscWeatherInfoCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var actualData: UILabel!
-    @IBOutlet weak var iconImage: UIImageView!
-    @IBOutlet weak var labelData: UILabel!
-    var miscWeatherInfoCollectionViewModel = MiscWeatherInfoCollectionViewModel()
+    @IBOutlet private weak var actualData: UILabel!
+    @IBOutlet private weak var iconImage: UIImageView!
+    @IBOutlet private weak var labelData: UILabel!
+    
+    private var miscWeatherInfoCollectionViewModel = MiscWeatherInfoCollectionViewModel()
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
+    
     func configure(newLabel labelsData: String, newValue valueData: String) {
-
-        iconImage.image = UIImage(systemName: miscWeatherInfoCollectionViewModel.backGroundImagesName(todayWeatherCondition: Icon(rawValue: labelsData)!))
+        guard let iconName = Icon(rawValue: labelsData) else { return }
+        iconImage.image = UIImage(systemName: miscWeatherInfoCollectionViewModel.backGroundImagesName(todayWeatherCondition: iconName))
         actualData.text = valueData
         labelData.text = labelsData
     }
 }
+
 enum Icon: String {
     case windspeed
     case pressure

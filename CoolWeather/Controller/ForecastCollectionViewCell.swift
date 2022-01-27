@@ -9,19 +9,16 @@ import UIKit
 
 class ForecastCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var iconImage: UIImageView!
-    @IBOutlet weak var temperatureLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+    @IBOutlet private weak var dateLabel: UILabel!
+    @IBOutlet private weak var timeLabel: UILabel!
+    @IBOutlet private weak var iconImage: UIImageView!
+    @IBOutlet private weak var temperatureLabel: UILabel!
     
     func configure(date convertedDate: String,
                    time convertedTime: String,
                    iconImage image: UIImage,
                    temperature currentTemperature: String) {
+        
         dateLabel.text = convertedDate
         timeLabel.text = convertedTime
         iconImage.image = image

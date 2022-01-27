@@ -9,7 +9,11 @@ import Foundation
 
 struct MiscWeatherViewModel {
     
-     var miscWeatherDataList: [String: String] = [:]
+    private(set) var miscWeatherDataList: [String: String] = [:]
+    
+    init(miscWeatherData: MiscWeatherData) {
+        setMiscWeatherDataList(mistWeatherData: miscWeatherData)
+    }
     
     mutating func setMiscWeatherDataList(mistWeatherData: MiscWeatherData) {
         miscWeatherDataList[Constants.miscWeatherList.kSunrise] = mistWeatherData.sunrise
@@ -24,5 +28,15 @@ struct MiscWeatherViewModel {
         miscWeatherDataList[Constants.miscWeatherList.kWindspeed] = mistWeatherData.windspeed
         miscWeatherDataList[Constants.miscWeatherList.kWindDegree] = mistWeatherData.windDegree
         miscWeatherDataList[Constants.miscWeatherList.kGust] = mistWeatherData.gust
+    }
+}
+
+extension MiscWeatherViewModel {
+    func iconName(at index: Int) -> String? {
+        Array(miscWeatherDataList.keys)[safe: index]
+    }
+    
+    func iconValue(at index: Int) -> String? {
+        Array(miscWeatherDataList.values)[safe: index]
     }
 }

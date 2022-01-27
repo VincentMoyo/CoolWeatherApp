@@ -9,15 +9,11 @@ import UIKit
 
 class FiveDaysCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var date: UILabel!
-    @IBOutlet weak var minimumTemperature: UILabel!
-    @IBOutlet weak var maximumTemperature: UILabel!
-    @IBOutlet weak var weatherIcon: UIImageView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
+    @IBOutlet private weak var date: UILabel!
+    @IBOutlet private weak var minimumTemperature: UILabel!
+    @IBOutlet private weak var maximumTemperature: UILabel!
+    @IBOutlet private weak var weatherIcon: UIImageView!
+
     func configure(date convertedDate: String,
                    minimumTemperature currentMinimumTemperature: String,
                    maximumTemperature currentMaximumTemperature: String,

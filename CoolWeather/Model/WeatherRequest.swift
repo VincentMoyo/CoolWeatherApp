@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 import UIKit
 
-struct WeatherRequest {
+struct WeatherRequest: WeatherRequestProtocol {
     
     var delegateError: ErrorReporting?
 
@@ -24,6 +24,7 @@ struct WeatherRequest {
         let unitsQueryItem = URLQueryItem(name: "units", value: "metric")
         let appIDQueryItem = URLQueryItem(name: "appid", value: "142b7217f291c1757ed44fd29411e4b3")
         components.queryItems = [latitudeQueryItem, longitudeQueryItem, excludeQueryItem, unitsQueryItem, appIDQueryItem]
+        
         return components.url
     }
     
@@ -129,24 +130,21 @@ struct WeatherRequest {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(OneCallWeatherAPIFormat.self, from: weatherData)
-            
             let sunrise = decodedData.daily[0].sunriseTime
             let sunset = decodedData.daily[0].sunsetTime
             let moonrise = decodedData.daily[0].moonriseTime
             let moonset = decodedData.daily[0].moonsetTime
             let uvProtection = decodedData.daily[0].uvProtection
-            
+            var maximumTemperature: [Int] = []
+            var minimumTemperature: [Int] = []
             var date: [Int] = []
+            
             for count in 0..<decodedData.daily.count {
                 date.append(decodedData.daily[count].date)
             }
-            
-            var maximumTemperature: [Int] = []
             for count in 0..<decodedData.daily.count {
                 maximumTemperature.append(Int(decodedData.daily[count].currentTemperature.maximum))
             }
-            
-            var minimumTemperature: [Int] = []
             for count in 0..<decodedData.daily.count {
                 minimumTemperature.append(Int(decodedData.daily[count].currentTemperature.minimum))
             }
@@ -159,6 +157,7 @@ struct WeatherRequest {
                                                   maximumTemperatureOfTheDay: maximumTemperature,
                                                   minimumTemperatureOfTheDay: minimumTemperature,
                                                   uvProtection: uvProtection)
+            
             return weather
         } catch {
             delegateError?.showUserErrorMessageDidInitiate(NSLocalizedString("WEATHER_API_ERROR", comment: "") + "\(error)")
@@ -182,25 +181,25 @@ struct WeatherRequest {
             let maxTemp = decodedData.list[0].main.temp_max
             let visibility = decodedData.list[0].visibility
             let windDegree = decodedData.list[0].wind.degrees
-            
             var conditionName: [String] = []
+            var temperature: [Int] = []
+            var date: [Int] = []
+            var tempMaxMin: [Double: Double] = [:]
             var id: [Int] = []
+            
             for count in 0..<decodedData.list.count {
                 id.append(decodedData.list[count].weather[0].descriptionID)
                 conditionName.append(checkConditionId(decodedData.list[count].weather[0].descriptionID))
             }
             
-            var temperature: [Int] = []
             for count in 0..<decodedData.list.count {
                 temperature.append(Int(decodedData.list[count].main.temp))
             }
             
-            var date: [Int] = []
             for count in 0..<decodedData.list.count {
                 date.append(decodedData.list[count].date)
             }
             
-            var tempMaxMin: [Double: Double] = [:]
             for count in 0..<decodedData.list.count {
                 tempMaxMin[decodedData.list[count].main.temp_min] = decodedData.list[count].main.temp_max
             }
